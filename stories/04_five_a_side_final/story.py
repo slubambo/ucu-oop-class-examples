@@ -55,6 +55,12 @@ class TeamPass(Attack):  # Hierarchical inheritance: a sibling of Dribble.
         return 10
 
 
+#EXTENSION 1: A long pass to the wing, IS-A Attack.
+class LongPass(Attack):
+    def effort(self):
+        return 15    #Costs more tha TeamPass(10), less than Dribble (30)    
+
+
 class SmartDribble(Dribble):  # Attack -> Dribble -> SmartDribble: multilevel.
     def effort(self):
         return super().effort() - 10  # Reuse and extend the parent's method.
