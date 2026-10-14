@@ -24,8 +24,15 @@ class EnergyTank:
             return False
         self.remaining = self.remaining - amount
         return True
-
-
+        
+    def recover(self,amount):
+        if amount <= 0:
+           return False
+        new_total = self.remaining + amount
+        if new_total > 100:
+           return False
+        self.remaining = new_total
+        return True 
 # ACT 2: An attack must say what effort it needs; players can choose the style.
 class Attack(ABC):
     team = "Mukono Meteors"  # Shared class state; each attack has its own name.
