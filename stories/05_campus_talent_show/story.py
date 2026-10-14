@@ -26,6 +26,7 @@ class ShowClock:
         return True
 
 
+
 # ACT 2: Every performance must tell the MC its duration.
 class Performance(ABC):
     venue = "UCU student talent afternoon"  # Class attribute: shared fact.
@@ -80,6 +81,18 @@ class AudienceWave:  # No Performance inheritance: the shared behaviour is enoug
         return "Audience wave: one minute, everybody gets to be famous."
 
 
+class ThankYouSpeech:
+    # Duck typing lets this act join the show without inheriting Performance.
+    def __init__(self):
+        self.name = "Cedric's thank-you speech"
+
+    def duration(self):
+        return 1
+
+    def describe(self):
+        return f"{self.name}: one minute of gratitude to close the show."
+
+
 # ACT 4: The show HAS-A clock; it borrows and swaps performance objects.
 class TalentShow:
     def __init__(self, mc, minutes):
@@ -99,6 +112,15 @@ class TalentShow:
             self._lineup.append(performance)  # Collaborating objects in a collection.
             return f"MC {self.mc} books {performance.name}."
         return f"No slot for {performance.name}. The timetable has entered the chat."
+
+    def cancel_last(self):
+        # Remove the newest act and return its unchanged duration to the clock.
+        if not self._lineup:
+            # An empty lineup has nothing to cancel.
+            return False
+        performance = self._lineup.pop()  # pop() removes and returns the last act.
+        self.clock.remaining += performance.duration()  # Refund its booked minutes.
+        return True  # Report that an act was successfully cancelled.
 
 
 def audition(performances):  # Week 1's function, parameters, list, and loop.
