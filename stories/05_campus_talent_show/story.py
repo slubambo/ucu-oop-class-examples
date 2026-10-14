@@ -129,3 +129,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+class ThankYouSpeech:
+    def __init__(self, name):
+        self.name = name
+
+    def duration(self):
+        return 1
+
+    def describe(self):
+        return f"{self.name}: a short thank-you speech ({self.duration()} minute)"
