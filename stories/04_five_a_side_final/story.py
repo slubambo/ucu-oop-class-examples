@@ -113,7 +113,8 @@ def main():
     print("=== THE FIVE-A-SIDE FINAL ===")
     print("One final attack. Brian wants skills; the energy tank wants teamwork.")
     actions = [Dribble("Brian"), TeamPass("Quick team pass"),
-               CrowdFavourite("Achen"), WaterBreak()]
+               CrowdFavourite("Achen"), WaterBreak(),
+              TrainedDribble("Ruth")]
     discuss_tactics(actions)  # WaterBreak fits by behaviour alone: duck typing.
     brian = Match("Brian", 35)
     ruth = Match("Ruth", 40)  # Independent state in a second object.
