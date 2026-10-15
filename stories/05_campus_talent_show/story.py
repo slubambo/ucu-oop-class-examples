@@ -58,6 +58,12 @@ class Poetry(Performance):  # Shared parent: hierarchical inheritance.
 class ShortDance(Dance):  # Performance -> Dance -> ShortDance: multilevel.
     def duration(self):
         return super().duration() // 2  # Extend a parent's implementation.
+class LightningDance(ShortDance):  # Performance -> Dance -> ShortDance -> LightningDance
+    def duration(self):
+        return max(1, super().duration() - 1) # Extend a parent's implementation.
+lightning=LightningDance("Mukono Lightning Crew")
+print(lightning.describe())  # 2 minutes, not 0: the max() protects the rule.
+print(lightning.duration())  # 2 minutes, not 0: the max() protects the rule.
 
 
 # ACT 3: One extra capability joins the existing dance family.
@@ -91,6 +97,20 @@ class TalentShow:
     @property
     def act_count(self):  # Read-only: reflects the actual booked lineup.
         return len(self._lineup)
+
+    def running_order(self):
+        if self._lineup:
+            order = "\n".join(
+                f"{number}. {performance.name}"
+                for number, performance in enumerate(self._lineup, start=1)
+            )
+        else:
+            order = "No acts booked yet."
+        return (
+            f"Running order:\n{order}\n"
+            f"Act count: {self.act_count}\n"
+            f"Minutes left: {self.clock.remaining}"
+        )
 
     def book(self, performance):
         self.performance = performance  # Borrowed part: aggregation.
@@ -129,3 +149,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+class ThankYouSpeech:
+    def __init__(self, name):
+        self.name = name
+
+    def duration(self):
+        return 1
+
+    def describe(self):
+        return f"{self.name}: a short thank-you speech ({self.duration()} minute)"
