@@ -78,6 +78,17 @@ class StorytellingCircle:  # Unrelated class with the expected methods.
 
     def describe(self):
         return "Storytelling circle: zero MB, unlimited plot twists."
+    # EXTENSION 3: LUDO NIGHT
+    class BoardGame:
+        title = "Ludo"
+
+        def data_cost(self):
+            return 0
+        def describe(self):
+            return "Ludo : zero MB, Unlimited fun."
+
+        def enjoy(self):
+            return f"{self.title} is a fun offline activity for the hostel group."
 
 
 # ACT 4: MovieNight HAS-A bundle; it is not a kind of bundle.
@@ -125,6 +136,8 @@ def main():
     for parent in FeaturedMovie.__mro__:
         print(parent.__name__)
     print("Ending: the stories are dramatic; the data balance is peaceful.")
+    print("optional extension: Ludo night")
+    ludo = StorytellingCircle.BoardGame()
 
 
 if __name__ == "__main__":
