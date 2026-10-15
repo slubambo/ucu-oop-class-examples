@@ -102,6 +102,12 @@ class Match:
     def completed_actions(self):  # Read-only; computed, not independently editable.
         return len(self._actions)
 
+class TrainedDribble(SmartDribble): # Reuses SmartDribble's effort (which is 20) and subtracts 5
+    def effort(self):
+        return supper().effort() - 5
+
+    
+
     def play(self, action):
         self.action = action  # A replaceable part: aggregation.
         effort = action.effort()  # Abstraction: Match doesn't calculate the skill.
@@ -120,13 +126,15 @@ def main():
     print("=== THE FIVE-A-SIDE FINAL ===")
     print("One final attack. Brian wants skills; the energy tank wants teamwork.")
     actions = [Dribble("Brian"), TeamPass("Quick team pass"),
-               CrowdFavourite("Achen"), WaterBreak()]
+               CrowdFavourite("Achen"), WaterBreak(),
+              TrainedDribble("Brian")]
     discuss_tactics(actions)  # WaterBreak fits by behaviour alone: duck typing.
     brian = Match("Brian", 35)
     ruth = Match("Ruth", 40)  # Independent state in a second object.
     print(brian.play(actions[2]))  # Smart dribble costs 20.
     print(brian.play(actions[0]))  # Refused; 15 cannot pay 30.
     print(brian.play(actions[1]))  # Teamwork costs 10.
+    print(ruth.play(actions[4]))   # TrainedDribble costs 15 (20 - 5).
     print(brian.play(actions[3]))  # Change collaborator without changing Match.
     print(ruth.play(actions[0]))
     print(f"Brian: {brian.energy.remaining} energy; actions: {brian.completed_actions}")
