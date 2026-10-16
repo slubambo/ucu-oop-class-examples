@@ -26,6 +26,17 @@ class LunchWallet:
         self.balance = self.balance - amount
         return True
 
+    # Extension 2: Mum sends lunch money.
+    # A positive amount is added to the balance and the method returns True.
+    # Zero or a negative amount is refused: returns False and the balance stays the same.
+    def top_up(self, amount):
+        if amount <= 0:
+            return False
+        self.balance = self.balance + amount
+        return True
+
+  
+
 
 # ACT 2: Meal states WHAT every menu item must do; children supply HOW.
 class Meal(ABC):
