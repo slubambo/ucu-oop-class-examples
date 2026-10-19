@@ -13,7 +13,7 @@ A five-person group completes five different extensions. A six-person group comp
 | Member name | University access number | GitHub username | Extension number | Personal branch | Merged PR link |
 |---|---|---|---|---|---|
 | Member 1 | | | | | |
-| Member 2 | | | | | |
+| Member 2 | MUGANGA MARK| B34602| mugangamark4-creator|Extension 2 | mark-B34602|
 | Member 3 | | | | | |
 | Member 4 | | | | | |
 | Member 5 | | | | | |
