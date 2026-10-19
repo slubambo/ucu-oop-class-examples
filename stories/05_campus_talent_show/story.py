@@ -1,3 +1,4 @@
+
 """Campus Talent Show: a cheerful MC must keep the show on time.
 Run: python3 story.py. All acts and timings are fictional classroom examples.
 """
@@ -7,11 +8,11 @@ from abc import ABC, abstractmethod
 # ACT 1: Time is a resource with a rule: don't schedule negative minutes.
 class ShowClock:
     def __init__(self, minutes):
-        self.remaining = minutes  # Initialisation goes through the setter.
+        self.remaining = minutes
 
     @property
     def remaining(self):
-        return self.__remaining  # Name mangling; not an access-control system.
+        return self.__remaining
 
     @remaining.setter
     def remaining(self, amount):
@@ -28,36 +29,36 @@ class ShowClock:
 
 # ACT 2: Every performance must tell the MC its duration.
 class Performance(ABC):
-    venue = "UCU student talent afternoon"  # Class attribute: shared fact.
+    venue = "UCU student talent afternoon"
 
     def __init__(self, name):
-        self.name = name  # Instance attribute: this specific act's name.
+        self.name = name
 
     def describe(self):
         return f"{self.name}: {self.duration()} minutes at {self.venue}."
 
     @abstractmethod
     def duration(self):
-        pass  # A bare Performance object is incomplete.
+        pass
 
 
-class Dance(Performance):  # IS-A Performance: single inheritance.
+class Dance(Performance):
     def __init__(self, crew, minutes=6):
         super().__init__(f"{crew} dance")
         self.minutes = minutes
 
     def duration(self):
-        return self.minutes  # Override the abstract method.
+        return self.minutes
 
 
-class Poetry(Performance):  # Shared parent: hierarchical inheritance.
+class Poetry(Performance):
     def duration(self):
         return 4
 
 
-class ShortDance(Dance):  # Performance -> Dance -> ShortDance: multilevel.
+class ShortDance(Dance):
     def duration(self):
-        return super().duration() // 2  # Extend a parent's implementation.
+        return super().duration() // 2
 
 
 # ACT 3: One extra capability joins the existing dance family.
@@ -67,10 +68,11 @@ class ApplauseMixin:
 
 
 class HeadlineDance(ApplauseMixin, ShortDance):
-    pass  # Multiple parents and several levels: a hybrid hierarchy.
+    pass
 
 
-class AudienceWave:  # No Performance inheritance: the shared behaviour is enough.
+class AudienceWave:
+    # No Performance inheritance: the shared behaviour is enough.
     name = "Audience wave"
 
     def duration(self):
@@ -80,51 +82,106 @@ class AudienceWave:  # No Performance inheritance: the shared behaviour is enoug
         return "Audience wave: one minute, everybody gets to be famous."
 
 
-# ACT 4: The show HAS-A clock; it borrows and swaps performance objects.
+# EXTENSION 3: Thank-you speech.
+# Does not inherit from Performance; it uses duck typing.
+class ThankYouSpeech:
+    def __init__(self, name):
+        self.name = name
+
+    def duration(self):
+        return 1
+
+    def describe(self):
+        return (
+            f"{self.name}: one minute, thanking everyone "
+            "for making the show a success."
+        )
+
+
+# ACT 4: The show HAS-A clock and manages performance objects.
 class TalentShow:
     def __init__(self, mc, minutes):
         self.mc = mc
-        self.clock = ShowClock(minutes)  # Owned part: composition.
-        self._lineup = []  # _ marks intended internal use, by convention.
+        self.clock = ShowClock(minutes)
+        self._lineup = []
         self.performance = None
 
     @property
-    def act_count(self):  # Read-only: reflects the actual booked lineup.
+    def act_count(self):
         return len(self._lineup)
 
     def book(self, performance):
-        self.performance = performance  # Borrowed part: aggregation.
-        minutes = performance.duration()  # Abstraction: MC doesn't count dance steps.
+        self.performance = performance
+        minutes = performance.duration()
+
         if self.clock.reserve(minutes):
-            self._lineup.append(performance)  # Collaborating objects in a collection.
+            self._lineup.append(performance)
             return f"MC {self.mc} books {performance.name}."
-        return f"No slot for {performance.name}. The timetable has entered the chat."
+
+        return (
+            f"No slot for {performance.name}. "
+            "The timetable has entered the chat."
+        )
 
 
-def audition(performances):  # Week 1's function, parameters, list, and loop.
+def audition(performances):
     for performance in performances:
-        print(performance.describe())  # One call, many versions: polymorphism.
+        print(performance.describe())
 
 
 def main():
     print("=== CAMPUS TALENT SHOW ===")
     print("MC Joel promised to finish on time. The dancers brought an encore.")
-    acts = [Dance("Mukono Movers"), Poetry("Achen's spoken word"),
-            HeadlineDance("Mukono Movers: short set"), AudienceWave()]
-    audition(acts)  # AudienceWave works by duck typing, with no common parent.
+
+    acts = [
+        Dance("Mukono Movers"),
+        Poetry("Achen's spoken word"),
+        HeadlineDance("Mukono Movers: short set"),
+        AudienceWave(),
+        ThankYouSpeech("Closing Thank-You Speech")
+    ]
+
+    # All acts, including ThankYouSpeech, can be auditioned.
+    audition(acts)
+
     joel = TalentShow("Joel", 8)
-    faith = TalentShow("Faith", 6)  # Another show owns a different clock and list.
-    print(joel.book(acts[2]))  # 3 minutes.
-    print(joel.book(acts[0]))  # 6 won't fit in 5: refuse without changing state.
-    print(joel.book(acts[1]))  # 4 minutes.
-    print(joel.book(acts[3]))  # 1 minute: the whole audience finishes the show.
-    print(faith.book(acts[0]))
+    faith = TalentShow("Faith", 6)
+
+    print("\n=== JOEL'S SHOW ===")
+    print(joel.book(acts[2]))  # 3 minutes: succeeds.
+    print(joel.book(acts[0]))  # 6 minutes: refused; only 5 remain.
+    print(joel.book(acts[1]))  # 4 minutes: succeeds.
+    print(joel.book(acts[3]))  # 1 minute: succeeds.
+
     print(f"Joel: {joel.clock.remaining} minutes left; acts: {joel.act_count}")
+
+    print("\n=== FAITH'S SHOW ===")
+    print(faith.book(acts[0]))
     print(f"Faith: {faith.clock.remaining} minutes left; acts: {faith.act_count}")
-    print("MRO (look left to right):")
+
+    # Test the thank-you speech with exactly one minute available.
+    print("\n=== THANK-YOU SPEECH TEST ===")
+    speech_show = TalentShow("Speech MC", 1)
+    print(speech_show.book(acts[4]))
+    print(
+        f"Speech show: {speech_show.clock.remaining} minutes left; "
+        f"acts: {speech_show.act_count}"
+    )
+
+    # Boundary test: there is no time available.
+    print("\n=== BOUNDARY TEST ===")
+    full_show = TalentShow("Final MC", 0)
+    print(full_show.book(acts[4]))
+    print(
+        f"Final show: {full_show.clock.remaining} minutes left; "
+        f"acts: {full_show.act_count}"
+    )
+
+    print("\nMRO (look left to right):")
     for parent in HeadlineDance.__mro__:
         print(parent.__name__)
-    print("Ending: everyone gets a turn, and Joel's timetable survives.")
+
+    print("Ending: everyone gets a turn, and the timetable survives.")
 
 
 if __name__ == "__main__":
