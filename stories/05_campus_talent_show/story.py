@@ -79,6 +79,15 @@ class AudienceWave:  # No Performance inheritance: the shared behaviour is enoug
     def describe(self):
         return "Audience wave: one minute, everybody gets to be famous."
 
+class ThankYouSpeech:
+    def __init__(self, name):
+        self.name = name
+
+    def duration(self):
+        return 1
+
+    def describe(self):
+        return f"{self.name}: one minute, thanking everyone for making the show a success."
 
 # ACT 4: The show HAS-A clock; it borrows and swaps performance objects.
 class TalentShow:
@@ -109,8 +118,12 @@ def audition(performances):  # Week 1's function, parameters, list, and loop.
 def main():
     print("=== CAMPUS TALENT SHOW ===")
     print("MC Joel promised to finish on time. The dancers brought an encore.")
-    acts = [Dance("Mukono Movers"), Poetry("Achen's spoken word"),
-            HeadlineDance("Mukono Movers: short set"), AudienceWave()]
+    acts = [Dance("Mukono Movers"), 
+            Poetry("Achen's spoken word"),
+            HeadlineDance("Mukono Movers: short set"), 
+            AudienceWave(),
+            ThankYouSpeech("Closing Thank-You Speech")
+            ]
     audition(acts)  # AudienceWave works by duck typing, with no common parent.
     joel = TalentShow("Joel", 8)
     faith = TalentShow("Faith", 6)  # Another show owns a different clock and list.
@@ -118,8 +131,10 @@ def main():
     print(joel.book(acts[0]))  # 6 won't fit in 5: refuse without changing state.
     print(joel.book(acts[1]))  # 4 minutes.
     print(joel.book(acts[3]))  # 1 minute: the whole audience finishes the show.
+    print(joel.book(acts[4]))
     print(faith.book(acts[0]))
     print(f"Joel: {joel.clock.remaining} minutes left; acts: {joel.act_count}")
+    print(f"Joel has {joel.clock.remaining} minutes left.")
     print(f"Faith: {faith.clock.remaining} minutes left; acts: {faith.act_count}")
     print("MRO (look left to right):")
     for parent in HeadlineDance.__mro__:
