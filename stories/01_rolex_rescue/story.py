@@ -26,6 +26,17 @@ class LunchWallet:
         self.balance = self.balance - amount
         return True
 
+    # Extension 2: Mum sends lunch money.
+    # A positive amount is added to the balance and the method returns True.
+    # Zero or a negative amount is refused: returns False and the balance stays the same.
+    def top_up(self, amount):
+        if amount <= 0:
+            return False
+        self.balance = self.balance + amount
+        return True
+
+  
+
 
 # ACT 2: Meal states WHAT every menu item must do; children supply HOW.
 class Meal(ABC):
@@ -130,3 +141,29 @@ def main():
 # This familiar run guard stops the story running when imported for checking.
 if __name__ == "__main__":
     main()
+
+
+# Extension 1: Passion juice
+# Add Juice as a subclass of Meal. Its price is UGX 1,500. Put it in the menu 
+# and buy it through LunchBreak.buy(). Do not change buy() or show_menu().
+
+class Juice(Meal):
+    def price(self):
+        return 1500
+
+menu = [
+    Rolex(),
+    Kikomando("Kikomando"),
+    FeaturedRolex(),
+    HomePackedLunch(),
+    Juice()
+]
+
+print(sarah.buy(menu[4]))
+
+class Juice(Meal):
+    def __init__(self):
+        super().__init__("Passion Juice")
+
+    def  price(self):
+        return 1500
