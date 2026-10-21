@@ -1,27 +1,28 @@
-# Group assignment: extend your story together
+# Group assignment: foundation plus three later-topic extensions
 
-**Due: Thursday, 15 October 2026.**
+**Deadline for all groups: end of Wednesday, 21 October 2026, Uganda time.** This means midnight as Wednesday changes to Thursday, 22 October (00:00 EAT / UTC+3).
 
-Work with your existing group on one story. Your group will use its own fork of this repository. A fork is your group's copy on GitHub. A branch is one member's working version inside that copy. A pull request, or PR, asks the group to review a branch before adding its changes to `main`.
+This is the current assignment for existing and catch-up groups. The earlier 15 October date has been replaced for this combined submission. Existing groups keep their completed foundation code and PRs; they add three later-topic choices. New groups complete their assigned foundation work and the same three-choice later-topic stage.
 
-The final `main` branch must contain working contributions and a merged PR from **every member**.
+A fork is your group's copy of the repository. A branch is one person's working version. A pull request, or PR, asks teammates to review a branch before its changes join `main`. The final group `main` must contain every member's work and merged PRs.
 
-## 1. Choose one extension per person
+## 1. Choose the work and share it fairly
 
-Open `EXTENSIONS.md` inside your story folder. Each story has six extensions.
+**Existing groups:** keep your current story. Its `EXTENSIONS.md` has six foundation tasks. A five-member group completes any five different tasks; a six-member group completes all six. Each member owns one task. Keep your completed work and its original contribution records.
 
-- A group of five chooses any five different extensions.
-- A group of six completes all six extensions.
-- Each person is responsible for one extension, their own branch, their own commits and their own PR.
-- Everyone also reviews every other member's PR and leaves a useful comment.
+**Catch-up groups:** use the story assigned in [CATCH_UP_GROUPS.md](CATCH_UP_GROUPS.md). Each new story has eight foundation choices. Groups of eight complete all eight; the group of seven chooses any seven. Each member owns one task.
 
-Make a simple list of members and their tasks before coding. Help each other, but each member must write, check and explain their own contribution.
+**All groups:** open your story's `ADVANCED_EXTENSIONS.md` and choose any **three different options** from A1–A5. Innovation is one of the choices; it is not a compulsory fourth feature. Agree on the three IDs before work begins. Keep the existing foundation contributions and add genuinely new later-topic work.
+
+Every member contributes code or meaningful automated tests to at least one chosen later-topic option and authors a later-topic PR. Split larger features among members; do not leave someone with only their name in a report. Everyone reviews all teammates' PRs with a useful comment.
+
+Read [LATER_TOPICS_GUIDE.md](LATER_TOPICS_GUIDE.md) before starting an unfamiliar topic. You may learn from documentation and discuss ideas, but each member must understand and explain their own work.
 
 ## 2. Make one fork for the group
 
 Choose one member to own the group's fork. That member signs in to GitHub, opens [the class repository](https://github.com/slubambo/ucu-oop-class-examples), and clicks **Fork**. Create the fork under that member's account.
 
-All members use **this same group fork**. You do not need five or six separate forks. Keep the default branch name `main`.
+All members use **this same group fork**. You do not need a separate fork for each member. Keep the default branch name `main`.
 
 If your group already made a fork before this assignment was added, use **Sync fork** on its GitHub page to bring in the latest instructions before starting. If GitHub reports a conflict, ask for help rather than discarding the group's work.
 
@@ -51,15 +52,17 @@ Each member creates a different branch. Code on your personal branch; changes re
 
 If you use GitHub Desktop, clone the group fork, fetch the latest `main`, and choose **New branch** with your personal branch name. The same assignment rules apply.
 
-## 5. Write your extension and show that it works
+## 5. Write your contribution and show that it works
 
-Read your story's `EXTENSIONS.md`. Add the feature to that story's `story.py` and create your own small demo file beside it. Leave the original `main()` and `expected_output.txt` as the baseline story. Your demo should show the new feature separately.
+For foundation work, follow your story's `EXTENSIONS.md`: add the feature and a personal demo. For later-topic work, follow `ADVANCED_EXTENSIONS.md`: you may add modules, demos and test files. Keep the original `story.py` entry point and its public methods available so the original story and earlier demos still work.
 
-Run the original story and your demo. Show a normal case and a refused, empty or boundary case. If the feature only reads information, show that it leaves the stored resource and history unchanged.
+Use your own branch and Git identity. Each member needs their own foundation PR and at least one later-topic PR containing code or meaningful automated tests. If your foundation PR is already merged, keep it as evidence; you do not need to repeat it. Do not make an empty PR just to record your name.
 
-Commit your work using your own Git identity. Make sure Git is configured with your name and an email linked to your GitHub account, or your GitHub-provided private email. This helps GitHub show the contribution under the correct member.
+Record the three chosen advanced option IDs and split the work among all members before coding. A larger option may have several authors, each with a clear subtask and their own PR. Describe which part you wrote and which checks you ran. Documentation and review alone do not replace your coding/testing contribution.
 
-For example, replace the branch, story folder and demo file with yours:
+Run the original story, the relevant demos and the checks for your contribution. On the final combined branch, all demos and tests must work together. Keep the original `main()` and `expected_output.txt` as the starting story. Add stricter behaviour through new methods or wrappers rather than making the original demonstration crash.
+
+Make sure Git uses your name and an email linked to your GitHub account, or your GitHub-provided private email. For example, replace the paths and branch name below with yours:
 
 ```sh
 git add stories/01_rolex_rescue/story.py stories/01_rolex_rescue/demo_amina_26b12345.py
@@ -67,7 +70,7 @@ git commit -m "Add lunch wallet top-up and demo"
 git push -u origin amina-26b12345
 ```
 
-In GitHub Desktop, review the changed files, write a clear commit message, commit to your personal branch, then publish or push that branch.
+In GitHub Desktop, review your changed files, enter a clear commit message, commit to your personal branch, then publish or push that branch. For a later-topic PR, start a new personal branch from the latest group `main`; you can add a short suffix such as `amina-26b12345-json`.
 
 ## 6. Open a PR into your group's main branch
 
@@ -86,12 +89,12 @@ Use a clear title, such as `Extension 2: lunch wallet top-up — Amina`.
 
 In the PR description, write:
 
-- Your name, access number and extension number.
+- Your name, access number, registration number and foundation task or later-topic option ID.
 - What you added and where it is in the code.
 - How to run your demo.
 - The inputs, expected results and actual results for your checks.
 
-Each member must author their own PR. Ask all the other members to review it.
+Each member must author their own PRs. Ask all the other members to review them.
 
 ## 7. Everyone reviews and comments before merge
 
@@ -110,7 +113,7 @@ Examples of useful comments:
 
 “Good”, “done” or an emoji alone is not enough. The author responds to questions and fixes problems on the **same branch**. Pushing more commits updates the same PR; there is no need to open a replacement PR for each fix.
 
-For a five-person group, each PR needs comments from its **four teammates**. For a six-person group, each PR needs comments from its **five teammates**. The author checks their own work and responds, but does not count as a teammate reviewer on their own PR. GitHub also does not allow authors to approve their own PRs. See [GitHub's review guide](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request).
+Each PR needs useful comments from **all the author’s teammates** before merge: four reviewers in a group of five, five in a group of six, six in a group of seven, or seven in a group of eight. The author checks their own work and responds, but does not count as a teammate reviewer on their own PR. GitHub also does not allow authors to approve their own PRs. See [GitHub's review guide](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request).
 
 Everyone therefore reviews all the other members' PRs. If a new commit changes a part you reviewed, check that change again before the PR is merged.
 
@@ -140,22 +143,36 @@ If you still have uncommitted work on your personal branch, commit it there befo
 
 ## 9. Record the group's work
 
-Copy [GROUP_TEMPLATE.md](GROUP_TEMPLATE.md) to a file called `GROUP.md` in the root of the group fork. Fill in your group number, story, members, extension numbers, branch names and PR links. One member can create the first version in their own PR; the others can update their rows in their own PRs. Agree on this before editing the same file.
+Copy [GROUP_TEMPLATE.md](GROUP_TEMPLATE.md) to `GROUP.md` in the root of the group fork. Existing groups should extend their existing file rather than erase the earlier contribution record.
 
-Keep only five member rows for a five-person group, or all six for a six-person group. Use the actual merged PR links, not only branch links.
+Your `GROUP.md` must include:
+
+- Your story title and group number or catch-up label.
+- A complete member list: **full name, university access number, registration number and GitHub username for every person**. Access and registration numbers are separate fields; include both.
+- Each member's foundation task, later-topic responsibility, branch names, commit links and merged PR links.
+- Links to useful review comments each member left on teammates' PRs.
+- The three chosen later-topic IDs, and exact commands for the original story, demos and automated checks.
+- **One short group evaluation of no more than 250 words.** Explain what you built, which OOP ideas you used, what worked, the main difficulty and how you handled it, and any remaining limitation. This is one evaluation for the whole group, not 250 words per person.
+
+Use your own GitHub account for commits, PRs and reviews. Keep these records in GitHub rather than replacing them with screenshots. Other members may help, but the author and reviewer of each contribution must be clear.
+
+Keep the actual number of member rows: five or six for the original groups, seven or eight for the catch-up groups. Do not publish the lecturer's attendance PDF or a copy of the full class roster; your own group record is enough.
 
 ## 10. Submit your group work
 
-Submit **one link to the group fork** through the normal class submission channel by **Thursday, 15 October 2026**. `GROUP.md` should make it easy to find all members and their merged PRs. Each member should know the submission link and be able to explain their own feature.
+Submit the **GitHub repository link for your group fork**, with the completed work on `main`, through the normal class submission channel by the end of **Wednesday, 21 October 2026, Uganda time**. The cut-off is midnight as Wednesday changes to Thursday, 22 October.
 
-Before submitting, check the final `main` branch:
+Before submitting:
 
-- [ ] All five chosen extensions work for a five-person group, or all six for a six-person group.
-- [ ] Every member has a working extension, their own commits and their own merged PR.
-- [ ] Each PR has useful comments from every other member, made before merge.
+- [ ] The required one-foundation-task-per-member work is complete.
+- [ ] Exactly three later-topic choices are clearly recorded.
+- [ ] Every member has their own foundation contribution and a merged later-topic PR with code or meaningful automated tests.
+- [ ] Every PR has useful comments from all its author's teammates, made before merge.
 - [ ] The original story still runs and matches its original expected output.
-- [ ] Every member's demo runs from the final `main` branch.
-- [ ] No merge conflict markers remain in the files.
-- [ ] `GROUP.md` lists all members, their extensions, branches and merged PR links.
+- [ ] Foundation demos, later-topic demos and automated checks run together on final `main`.
+- [ ] No merge conflict markers remain.
+- [ ] `GROUP.md` lists every member's full name, access number, registration number and GitHub username.
+- [ ] The story title, responsibilities, branch/commit/PR links, review links and run/check commands are recorded.
+- [ ] The group evaluation is complete and does not exceed 250 words.
 
-A PR that is still open, a branch that was never merged, or code copied into `main` without the member's PR does not meet the contribution requirement. The submitted group fork is the final place to look for the completed work.
+An open PR, an unmerged branch or work copied to `main` without its author's PR does not meet the contribution requirement.

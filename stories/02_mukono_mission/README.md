@@ -6,7 +6,7 @@ This story includes all the OOP concepts from Weeks 1 to 6. The numbers are made
 
 ## Group assignment
 
-The group task is due **Thursday, 15 October 2026**. [Choose from six extensions](EXTENSIONS.md), with one extension per member: choose any five for a five-person group, or all six for a six-person group. Follow the [fork, branch, review and merge instructions](../../GROUP_ASSIGNMENT.md).
+The combined assignment is due at the end of **Wednesday, 21 October 2026, Uganda time**. Keep your [foundation work](EXTENSIONS.md), then choose three [later-topic extensions](ADVANCED_EXTENSIONS.md). Each member contributes foundation work and new code or meaningful automated tests through reviewed PRs. The [common assignment](../../GROUP_ASSIGNMENT.md) explains the workflow and what to submit.
 
 ## Run this story
 
@@ -34,7 +34,7 @@ The whole story prints without asking you to type anything. Open [expected_outpu
 
 ## Read the five acts
 
-**Act 1 — the rule keeper.** `TripPurse` keeps the changing resource. Its constructor sets a valid starting value. Its property getter reads that value. Its setter refuses a negative value. Its action method refuses a request that does not fit. The football story also limits energy to 100.
+**Act 1 — the rule keeper.** `TripPurse` keeps the changing resource. Its constructor sets a valid starting value. Its property getter reads that value. Its setter refuses a negative value. Its action method refuses a request that does not fit.
 
 **Act 2 — the family.** `Transport` is an abstract class. It says that every concrete member of the family must provide `quote_fare(distance)`. `Boda` and `Taxi` provide different versions. `super().__init__()` reuses the parent's setup.
 

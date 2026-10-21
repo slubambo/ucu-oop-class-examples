@@ -1,0 +1,22 @@
+=== THE CAMPUS PHOTO-DAY RUSH ===
+Joel is organising a campus photo afternoon. The camera has limited space and the queue is growing.
+Portrait set needs 15 MB.
+Group shot needs 10 MB.
+Mukono, smile! Compact portraits needs 7 MB.
+Phone selfie: 1 MB in this classroom model.
+Joel completes Compact portraits: 7 MB.
+Joel completes Portrait set: 15 MB.
+Not enough MB for Portrait set. Nothing recorded.
+Joel completes Phone selfie: 1 MB.
+Alex completes Group shot: 10 MB.
+Joel: 7 MB; completed: 3
+Alex: 20 MB; completed: 1
+MRO (method lookup order):
+FeaturedPortraits
+PhotoHype
+CompactPortraits
+PortraitSet
+PhotoPackage
+ABC
+object
+Ending: The photos are saved in the simulation, and the storage counter stays accurate.

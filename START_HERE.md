@@ -2,6 +2,8 @@
 
 You need **Python 3** and a text editor. We use **VS Code** in class. You do not need to install any Python packages for these examples.
 
+For the group assignment, follow [GROUP_ASSIGNMENT.md](GROUP_ASSIGNMENT.md) first: use the **group fork**, rather than editing or cloning only the lecturer's copy. These download steps are also useful for reading the original examples.
+
 ## 1. Download the examples
 
 On the main page of this repository, open **Code**, then choose **Download ZIP**. Find the downloaded ZIP file and extract it. On Windows, use **Extract All**. On a Mac, you can usually double-click the ZIP file to extract it.

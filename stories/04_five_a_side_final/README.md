@@ -6,7 +6,7 @@ This story includes all the OOP concepts from Weeks 1 to 6. The numbers are made
 
 ## Group assignment
 
-The group task is due **Thursday, 15 October 2026**. [Choose from six extensions](EXTENSIONS.md), with one extension per member: choose any five for a five-person group, or all six for a six-person group. Follow the [fork, branch, review and merge instructions](../../GROUP_ASSIGNMENT.md).
+The combined assignment is due at the end of **Wednesday, 21 October 2026, Uganda time**. Keep your [foundation work](EXTENSIONS.md), then choose three [later-topic extensions](ADVANCED_EXTENSIONS.md). Each member contributes foundation work and new code or meaningful automated tests through reviewed PRs. The [common assignment](../../GROUP_ASSIGNMENT.md) explains the workflow and what to submit.
 
 ## Run this story
 
