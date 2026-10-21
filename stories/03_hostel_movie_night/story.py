@@ -78,7 +78,45 @@ class StorytellingCircle:  # Unrelated class with the expected methods.
 
     def describe(self):
         return "Storytelling circle: zero MB, unlimited plot twists."
+class StorytellingCircle:  # Unrelated class with the expected methods.
+    title = "Hostel storytelling circle"
 
+    def data_cost(self):
+        return 0
+
+    def describe(self):
+        return "Storytelling circle: zero MB, unlimited plot twists."
+
+
+class BoardGame:  # Another unrelated class: duck typing, no Entertainment parent.
+    title = "Ludo"
+
+    def data_cost(self):
+        return 0
+
+    def describe(self):
+        return "Ludo: zero MB, four tokens, and one friendship at risk."
+
+
+# ACT 4: MovieNight HAS-A bundle; it is not a kind of bundle.
+class MovieNight:
+    def __init__(self, host, megabytes):
+        self.host = host
+        self.bundle = DataBundle(megabytes)  # Owned part: composition.
+        self._watched = []  # _ means internal by convention.
+        self.entertainment = None
+
+    @property
+    def activities(self):  # Read-only; a count derived from the real list.
+        return len(self._watched)
+
+    def enjoy(self, entertainment):
+        self.entertainment = entertainment  # Borrowed, swappable: aggregation.
+        needed = entertainment.data_cost()  # Abstraction: HOW is hidden here.
+        if needed == 0 or self.bundle.use(needed):
+            self._watched.append(entertainment)  # Store actual collaborating objects.
+            return f"{self.host}'s group enjoys {entertainment.title}."
+        return f"{entertainment.title} needs too much data. Nobody hotspot secretly!"`
 
 # ACT 4: MovieNight HAS-A bundle; it is not a kind of bundle.
 class MovieNight:
