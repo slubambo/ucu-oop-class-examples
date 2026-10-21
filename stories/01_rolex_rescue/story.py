@@ -1,3 +1,4 @@
+
 """The Rolex Rescue: Sarah's lunch break becomes a tiny OOP adventure.
 Run: python3 story.py. All prices are invented classroom values.
 Read Acts 1-5 in order; each act gives the next concept a job.
@@ -25,6 +26,21 @@ class LunchWallet:
             return False  # A normal refused purchase; no exception lesson needed.
         self.balance = self.balance - amount
         return True
+    
+    #Add a method for extension 3 top-up the wallet with a free banana
+    def top_up(self, amount):
+        if amount <= 0:
+            return False
+        self.balance = self.balance + amount
+        return True
+    def top_up(self, amount):
+        # Only positive amounts are allowed to increase the wallet balance.
+        if amount <= 0:
+            return False
+
+        self.balance = self.balance + amount
+        return True
+
 
 
 # ACT 2: Meal states WHAT every menu item must do; children supply HOW.
@@ -52,8 +68,21 @@ class Rolex(Meal):  # A Rolex IS-A Meal: single inheritance.
 
 
 class Kikomando(Meal):  # Two children of Meal: hierarchical inheritance.
+    def __init__(self, name="Kikomando"):
+        super().__init__(name)
+
     def price(self):
         return 2500
+
+
+##Extension 1: Passion juice is a meal that costs UGX 1,500.##
+class Juice(Meal):
+    def __init__(self):
+        super().__init__("Passion Juice")
+
+    def price(self):
+        return 1500 
+
 
 
 class AvocadoRolex(Rolex):  # Meal -> Rolex -> AvocadoRolex: multilevel.
@@ -84,6 +113,16 @@ class HomePackedLunch:  # Unrelated to Meal; still has the behaviour we need.
     def describe(self):
         return "Home-packed lunch: the auntie sponsorship package."
 
+#Extension 3: Banana From Home
+class FreeBanana:
+    name = "Free Banana From Home"
+
+    def price(self):
+        return 0
+
+    def describe(self):
+        return "Free Banana From Home: You can get a free banana from Home."
+    
 
 # ACT 4: The customer HAS-A wallet, rather than IS-A wallet.
 class LunchBreak:
@@ -102,20 +141,59 @@ class LunchBreak:
             self._orders.append(meal)  # A collection of objects, not just names.
             return f"{self.student} gets {meal.name}. Lunch is saved!"
         return f"{self.student}: {meal.name} is over budget. We shall admire it."
+    
+    
+    def preview_total(self, choices):
+        from later_topics import LunchMoney
 
+        total = LunchMoney(0)
 
+        for choice in choices:
+         total = total + LunchMoney(choice.price())
+
+        return total
+    
+#Extension 5: First purchase summary (read-only method to generate a receipt)
+    def receipt(self):
+        lines = [f"{self.student}'s lunch receipt","-----------------------------"]
+        if not self._orders:
+            lines.append("No purchases yet.")
+        else:
+            for order in self._orders:
+                lines.append(f"-{order.name}: UGX {order.price():,}")
+            total_spent = sum(order.price() for order in self._orders)
+            lines.append(f"Total spent: UGX {total_spent:,}")
+            lines.append(f"Remaining balance: UGX {self.wallet.balance:,}")
+            lines.append(f"Total items bought: {self.order_count}")
+        return "\n".join(lines)         
+     
+
+    
 def show_menu(items):  # Ordinary function; a list + loop recall Week 1.
     for item in items:
         print(item.describe())  # Polymorphism: SAME call, DIFFERENT results.
 
 
+##Extension 6: Groundnut rolex##
+class GroundnutRolex(Rolex):
+    def __init__(self):
+        super().__init__(eggs=2)
+        self.name = "Groundnut Rolex"
+
+        def price(self):
+            return super().price() +700
+gnut_rolex = GroundnutRolex()
+
 # ACT 5: The complete story, from the first choice to the ending.
 def main():
     print("=== THE ROLEX RESCUE ===")
-    menu = [Rolex(), Kikomando("Kikomando"), FeaturedRolex(), HomePackedLunch()]
+    menu = [Rolex(), Kikomando("Kikomando"), FeaturedRolex(), HomePackedLunch(), FreeBanana()] #Added FreeBanana to the menu 
     show_menu(menu)  # The unrelated packed lunch works too: duck typing.
     sarah = LunchBreak("Sarah", 5000)
     joel = LunchBreak("Joel", 3000)  # A second object has a DIFFERENT wallet.
+    jordan = LunchBreak("Jordan", 4000) #object jordan to test the GroundnutRolex class.
+    print(jordan.buy(gnut_rolex))
+    print(f"Jordan's balance: {jordan.wallet.balance}UGX.")
     print(sarah.buy(menu[2]))
     print(sarah.buy(menu[1]))  # Refused; balance and order count must stay put.
     print(joel.buy(menu[1]))
@@ -130,3 +208,4 @@ def main():
 # This familiar run guard stops the story running when imported for checking.
 if __name__ == "__main__":
     main()
+
