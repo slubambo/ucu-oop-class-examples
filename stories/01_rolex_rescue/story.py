@@ -106,21 +106,40 @@ class LunchBreak:
 
 def show_menu(items):  # Ordinary function; a list + loop recall Week 1.
     for item in items:
+<<<<<<< HEAD
+    ayebare-samuel-s25b13029
+=======
+>>>>>>> parent of 5f78eb4 (Add GroundnutRolex class with price extension)
         print(item.describe())  # Polymorphism: SAME call, DIFFERENT results.
 
 
 # ACT 5: The complete story, from the first choice to the ending.
 def main():
     print("=== THE ROLEX RESCUE ===")
+<<<<<<< HEAD
+
+    # GroundnutRolex() has been appended to the end of the menu list here
+    menu = [Rolex(), Kikomando("Kikomando"), FeaturedRolex(), HomePackedLunch(), GroundnutRolex()]
+    show_menu(menu)  # The unrelated packed lunch works too: duck typing.
+
+    sarah = LunchBreak("Sarah", 5000)
+    joel = LunchBreak("Joel", 3000)  # A second object has a DIFFERENT wallet.
+
+=======
     menu = [Rolex(), Kikomando("Kikomando"), FeaturedRolex(), HomePackedLunch()]
     show_menu(menu)  # The unrelated packed lunch works too: duck typing.
     sarah = LunchBreak("Sarah", 5000)
     joel = LunchBreak("Joel", 3000)  # A second object has a DIFFERENT wallet.
+>>>>>>> parent of 5f78eb4 (Add GroundnutRolex class with price extension)
     print(sarah.buy(menu[2]))
     print(sarah.buy(menu[1]))  # Refused; balance and order count must stay put.
     print(joel.buy(menu[1]))
     print(f"Sarah: UGX {sarah.wallet.balance:,}; orders: {sarah.order_count}")
     print(f"Joel: UGX {joel.wallet.balance:,}; orders: {joel.order_count}")
+<<<<<<< HEAD
+
+=======
+>>>>>>> parent of 5f78eb4 (Add GroundnutRolex class with price extension)
     print("MRO (look left to right):")
     for parent in FeaturedRolex.__mro__:
         print(parent.__name__)
@@ -129,4 +148,8 @@ def main():
 
 # This familiar run guard stops the story running when imported for checking.
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()
+=======
+    main()
+>>>>>>> parent of 5f78eb4 (Add GroundnutRolex class with price extension)
