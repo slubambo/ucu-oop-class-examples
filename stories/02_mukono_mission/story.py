@@ -5,6 +5,113 @@ from abc import ABC, abstractmethod
 
 
 # ACT 1: One trip owns a purse; the purse protects its own money.
+# A1: FareMoney class and Journey fare preview extension.
+
+class FareMoney:
+    def __init__(self, amount):
+        if type(amount) is not int:
+            raise TypeError("Amount must be a whole number.")
+        if amount < 0:
+            raise ValueError("Amount cannot be negative.")
+        self.__amount = amount
+
+    @property
+    def amount(self):
+        return self.__amount
+
+    def __str__(self):
+        return f"UGX {self.__amount:,}"
+
+    def __repr__(self):
+        return f"FareMoney({self.__amount})"
+
+    def __eq__(self, other):
+        if not isinstance(other, FareMoney):
+            return NotImplemented
+        return self.__amount == other.amount
+
+    def __add__(self, other):
+        if not isinstance(other, FareMoney):
+            return NotImplemented
+        return FareMoney(self.__amount + other.amount)
+
+
+# Add preview_total to Journey without changing the original main().
+def preview_total(self, choices, distance):
+    if type(distance) is not int or distance <= 0:
+        raise ValueError("Distance must be a positive whole number.")
+
+    total = FareMoney(0)
+
+    for choice in choices:
+        fare = FareMoney(choice.quote_fare(distance))
+        total = total + fare
+
+    return total
+
+
+# Automatically attach the preview method to Journey.
+# This executes only after Journey has been defined.
+def setup_fare_preview():
+    Journey.preview_total = preview_total
+
+
+# Demonstrate the extension without changing the original story.
+def demo_fare_money():
+    print("\n===== A1 FARE MONEY DEMONSTRATION =====")
+
+    money1 = FareMoney(3000)
+    money2 = FareMoney(3000)
+    money3 = FareMoney(1500)
+
+    print("Friendly display:", str(money1))
+    print("Developer display:", repr(money1))
+    print("Equal values:", money1 == money2)
+    print("Unequal values:", money1 == money3)
+
+    total = money1 + money3
+    print("Addition:", total)
+    print("Original money1 unchanged:", money1)
+    print("Original money3 unchanged:", money3)
+
+    print("Unsupported comparison:",
+          money1.__eq__(3000) is NotImplemented)
+    print("Unsupported addition:",
+          money1.__add__(3000) is NotImplemented)
+
+    for value in [-100, 2.5, True]:
+        try:
+            FareMoney(value)
+        except (ValueError, TypeError) as error:
+            print("Rejected:", repr(value), "-", error)
+
+    journey = Journey("Fred", 10000)
+
+    choices = [
+        Boda("Kato"),
+        Taxi("Mukono Taxi"),
+        Shuttle("Student Shuttle"),
+        WalkWithFriend()
+    ]
+
+    balance_before = journey.purse.balance
+    legs_before = journey.completed_legs
+
+    print("Preview total:", journey.preview_total(choices, 3))
+    print("Empty preview:", journey.preview_total([], 3))
+
+    print("Balance unchanged:",
+          journey.purse.balance == balance_before)
+    print("History unchanged:",
+          journey.completed_legs == legs_before)
+
+    for distance in [0, -3]:
+        try:
+            journey.preview_total(choices, distance)
+        except ValueError as error:
+            print("Rejected distance:", distance, "-", error)
+
+
 class TripPurse:
     def __init__(self, money):
         self.balance = money  # Constructor uses validation, too.
@@ -53,7 +160,14 @@ class Boda(Transport):  # IS-A Transport: single inheritance.
 class Taxi(Transport):  # Sibling classes: hierarchical inheritance.
     def quote_fare(self, distance):
         return 2000  # Flat classroom fare for this short route.
+# EXTENSION 1: Student Shuttle charges a fixed fare of UGX 1,500.
+class Shuttle(Transport):
 
+    def quote_fare(self, distance):
+        if distance <= 0:
+            return 0
+
+        return 1500
 
 class StudentBoda(Boda):  # Transport -> Boda -> StudentBoda: multilevel.
     def quote_fare(self, distance):
