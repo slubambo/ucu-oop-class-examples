@@ -26,6 +26,18 @@ class LunchWallet:
         self.balance = self.balance - amount
         return True
 
+    # Extension 2: Mum sends lunch money.
+    # A positive amount is added to the balance and the method returns True.
+    # Zero or a negative amount is refused: returns False and the balance stays the same.
+    def top_up(self, amount):
+        if amount <= 0:
+            return False
+        self.balance = self.balance + amount
+        return True
+
+  
+
+
 
 # ACT 2: Meal states WHAT every menu item must do; children supply HOW.
 class Meal(ABC):
@@ -103,10 +115,28 @@ class LunchBreak:
             return f"{self.student} gets {meal.name}. Lunch is saved!"
         return f"{self.student}: {meal.name} is over budget. We shall admire it."
 
+    def receipt(self):  # EXTENSION 5: a readable, read-only summary.
+        names = ", ".join(meal.name for meal in self._orders)
+        if not names:
+            names = "nothing yet"
+        return (f"Receipt for {self.student}: {self.order_count} order(s) "
+                f"({names}); balance left UGX {self.wallet.balance:,}.")
+
 
 def show_menu(items):  # Ordinary function; a list + loop recall Week 1.
     for item in items:
         print(item.describe())  # Polymorphism: SAME call, DIFFERENT results.
+        
+#extension 4
+def show_affordable(items, budget):
+    for item in items:
+        if item.price() <= budget:
+            print(item.describe())
+
+def show_affordable(items, budget):  # EXTENSION 4: window-shopping, no buying.
+    for item in items:
+        if item.price() <= budget:  # Read-only: compare, print, change nothing.
+            print(item.describe())
 
 
 # ACT 5: The complete story, from the first choice to the ending.
@@ -130,3 +160,79 @@ def main():
 # This familiar run guard stops the story running when imported for checking.
 if __name__ == "__main__":
     main()
+
+# NOTE (A2, Edrine): the two scratch blocks below were left half-written by the
+# foundation stage. One of them was missing commas, so this file had a syntax
+# error, and both of them ran on import, so the story could not be imported for
+# checking. They are commented out and kept here for the record; the working
+# story is main() above and the original text is unchanged in the git history.
+
+# Extension 06 - GroundNutRolex 
+#
+# menu = [
+#     Rolex()
+#     Kikomando()
+#     FeaturedRolex()
+#     HomePackedLunch()
+#     Juice()
+#     GroundNutRolex()
+#     ]
+#
+#     print(sarah.buy(menu[5]))
+
+# Extension 1: Passion juice
+# Add Juice as a subclass of Meal. Its price is UGX 1,500. Put it in the menu 
+# and buy it through LunchBreak.buy(). Do not change buy() or show_menu().
+
+class Juice(Meal):
+    def price(self):
+        return 1500
+
+# menu = [
+#     Rolex(),
+#     Kikomando("Kikomando"),
+#     FeaturedRolex(),
+#     HomePackedLunch(),
+#     Juice()
+# ]
+#
+# print(sarah.buy(menu[4]))
+
+class Juice(Meal):
+    def __init__(self):
+        super().__init__("Passion Juice")
+
+    def  price(self):
+        return 1500
+
+
+
+
+#LunchMoney value Object
+
+    def __init__(self, amount):
+        if isinstance(amount, bool) or not isinstance(amount, int) or amount < 0:
+            raise ValueError("LunchMoney requires a non-negative whole number")
+        self._amount = amount
+
+    @property
+    def amount(self):
+        return self._amount
+
+    def __str__(self):
+        return f"UGX {self.amount:,}"
+
+    def __repr__(self):
+        return f"LunchMoney({self.amount})"
+
+    def __eq__(self, other):
+        if not isinstance(other, LunchMoney):
+            return NotImplemented
+        return self.amount == other.amount
+
+    def __add__(self, other):
+        if not isinstance(other, LunchMoney):
+            return NotImplemented
+        return LunchMoney(self.amount + other.amount)
+
+
