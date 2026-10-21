@@ -25,6 +25,13 @@ class PhotoStorage:
         self.remaining = self.remaining - amount
         return True
 
+    def add_more(self, amount):
+        # Foundation 2: add MB, refuse bad amounts.
+        if not isinstance(amount, int) or isinstance(amount, bool) or amount <= 0:
+            return False
+        self.remaining = self.remaining + amount
+        return True
+
 
 # ACT 2: The abstract family says what every concrete choice must provide.
 class PhotoPackage(ABC):
@@ -86,6 +93,17 @@ class PhoneSelfie:  # No shared parent: callers use its matching behaviour.
         return "Phone selfie: 1 MB in this classroom model."
 
 
+class SketchPortrait:  # Added for Foundation 3: A guest from a different family
+    def __init__(self):
+        self.name = "Sketch portrait"
+
+    def describe(self):
+        return f"{self.name}: drawn by hand, requires no digital storage."
+
+    def storage_needed(self):
+        return 0
+
+
 # ACT 4: The coordinator HAS-A resource, and USES-A chosen object.
 class PhotoSession:
     def __init__(self, student, amount):
@@ -117,8 +135,11 @@ def show_choices(choices):
 def main():
     print("=== THE CAMPUS PHOTO-DAY RUSH ===")
     print("Joel is organising a campus photo afternoon. The camera has limited space and the queue is growing.")
+    
+    # SketchPortrait() has been added to the end of this list
     choices = [PortraitSet(), GroupShot("Group shot"),
-               FeaturedPortraits(), PhoneSelfie()]
+               FeaturedPortraits(), PhoneSelfie(), SketchPortrait()]
+    
     show_choices(choices)  # Includes an unrelated duck-typed guest.
     session = PhotoSession("Joel", 30)
     other = PhotoSession("Alex", 30)
@@ -129,6 +150,13 @@ def main():
     print(other.capture(choices[1]))
     print(f"{session.student}: {session.storage.remaining:,} MB; completed: {session.completed_count}")
     print(f"{other.student}: {other.storage.remaining:,} MB; completed: {other.completed_count}")
+    
+    # --- ADDED: The required zero-resource session test for Foundation 3 ---
+    zero_session = PhotoSession("Zero", 0)
+    print(zero_session.capture(choices[4]))
+    print(f"{zero_session.student}: {zero_session.storage.remaining:,} MB; completed: {zero_session.completed_count}")
+    # -----------------------------------------------------------------------
+
     print("MRO (method lookup order):")
     for parent in FeaturedPortraits.__mro__:
         print(parent.__name__)
