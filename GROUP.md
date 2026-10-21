@@ -13,13 +13,15 @@ Assign every group member a name, university access number, GitHub username, one
 
 | Member name | University access number | GitHub username | Option responsibility | Personal branch | PR link/status |
 | --- | --- | --- | --- | --- | --- |
-| TBD | TBD | TBD | A1: StageTime and preview | TBD | Not started |
-| TBD | TBD | TBD | A2: explained booking errors | TBD | Not started |
-| TBD | TBD | TBD | A4: choice factory and unittest suite | TBD | Not started |
+| Marcus Ainebyona | S25B13/032 | TBD | A2: failure-case checks and demo | `marcus-s25b13-032` | Not started |
+| akankwatsakevin0-ctrl | S25B13/066 | TBD | A4: choice factory and unittest suite | `kevin-s25b13-066` | Not started |
+| solomonsempangi20 | S25B13/108 | TBD | A1: implement `StageTime` | `solomon-s25b13-108` | Not started |
+| mulyanti mark | S25B13/110 | TBD | A2: custom exceptions and `StrictTalentShow` | `mulyanti-s25b13-110` | Not started |
+| sebela jeremy | S25B13/006 | TBD | A1: implement and check `preview_total()` | `jeremy-s25b13-006` | Not started |
 
 ## A1: Values that print, compare and add
 
-**Responsible member(s):** TBD
+**Responsible member(s):** solomonsempangi20 (`StageTime`), sebela jeremy (`preview_total()`)
 
 - Add immutable/read-only `StageTime(amount)` for non-negative whole minutes; reject negatives, fractions and Booleans.
 - Implement friendly `__str__`, distinct developer-facing `__repr__`, value equality and addition that returns a new value. Return `NotImplemented` for unsupported comparison/addition operands.
@@ -32,7 +34,7 @@ Assign every group member a name, university access number, GitHub username, one
 
 ## A2: Errors the story can explain
 
-**Responsible member(s):** TBD
+**Responsible member(s):** Marcus Ainebyona (failure-case checks and demo), mulyanti mark (custom exceptions and `StrictTalentShow`)
 
 - Add `ShowChoiceError`, `ShowRequestError` and `ShowResourceError`, each derived from `Exception`.
 - Add `StrictTalentShow` or a separate service with `safe_book(choice)`. Refuse `None`, a negative calculated requirement, and an unaffordable request with the matching exception before resource/history mutation; delegate affordable valid requests to the existing `book(choice)`.
@@ -46,7 +48,7 @@ Assign every group member a name, university access number, GitHub username, one
 
 ## A4: Factory, responsibilities and tests
 
-**Responsible member(s):** TBD
+**Responsible member(s):** akankwatsakevin0-ctrl
 
 - Add `create_choice(key, **settings)` for at least `Dance`, `Poetry` and `AudienceWave`; document required settings and raise a clear error for unknown keys.
 - Use the returned choices through their existing interface and the real `TalentShow` caller; do not add per-class branches to the coordinator.
