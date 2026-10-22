@@ -78,6 +78,12 @@ classDiagram
 
 Choice objects are created outside the coordinator. Passing them in is association. Keeping references to those independent objects is aggregation.
 
+## A4: Factory and responsibilities
+
+`create_choice(key, **settings)` creates choices using the keys `rolex`, `kikomando` and `home_packed_lunch`. The `rolex` key accepts the optional setting `eggs` (default `2`); the other keys accept no settings. An unknown key raises `ValueError` with the accepted keys.
+
+The factory owns choice creation, `LunchWallet.spend()` owns the affordability rule and balance change, and `show_menu()` / `show_affordable()` own display. This is a practical Single Responsibility improvement: `main()` asks the factory for choices instead of containing their construction details, while `LunchBreak.buy()` continues to use the shared `price()` interface and does not branch by choice class.
+
 ## Where each concept appears
 
 | Concept | In this story |

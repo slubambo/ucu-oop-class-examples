@@ -26,6 +26,18 @@ class LunchWallet:
         self.balance = self.balance - amount
         return True
 
+    # Extension 2: Mum sends lunch money.
+    # A positive amount is added to the balance and the method returns True.
+    # Zero or a negative amount is refused: returns False and the balance stays the same.
+    def top_up(self, amount):
+        if amount <= 0:
+            return False
+        self.balance = self.balance + amount
+        return True
+
+  
+
+
 
 # ACT 2: Meal states WHAT every menu item must do; children supply HOW.
 class Meal(ABC):
@@ -85,6 +97,26 @@ class HomePackedLunch:  # Unrelated to Meal; still has the behaviour we need.
         return "Home-packed lunch: the auntie sponsorship package."
 
 
+def create_choice(key, **settings):
+    """Create a choice using 'rolex', 'kikomando' or 'home_packed_lunch'.
+
+    Rolex accepts the optional setting eggs (default 2). The other choices
+    accept no settings.
+    """
+    if key == "rolex":
+        return Rolex(**settings)
+    if key == "kikomando":
+        return Kikomando("Kikomando", **settings)
+    if key == "home_packed_lunch":
+        if settings:
+            unexpected = next(iter(settings))
+            raise TypeError(f"Home-packed lunch does not accept setting {unexpected!r}.")
+        return HomePackedLunch()
+    raise ValueError(
+        f"Unknown choice key {key!r}. Choose 'rolex', 'kikomando' or 'home_packed_lunch'."
+    )
+
+
 # ACT 4: The customer HAS-A wallet, rather than IS-A wallet.
 class LunchBreak:
     def __init__(self, student, money):
@@ -103,16 +135,33 @@ class LunchBreak:
             return f"{self.student} gets {meal.name}. Lunch is saved!"
         return f"{self.student}: {meal.name} is over budget. We shall admire it."
 
+    def receipt(self):  # EXTENSION 5: a readable, read-only summary.
+        names = ", ".join(meal.name for meal in self._orders)
+        if not names:
+            names = "nothing yet"
+        return (f"Receipt for {self.student}: {self.order_count} order(s) "
+                f"({names}); balance left UGX {self.wallet.balance:,}.")
+
 
 def show_menu(items):  # Ordinary function; a list + loop recall Week 1.
     for item in items:
         print(item.describe())  # Polymorphism: SAME call, DIFFERENT results.
 
+def show_affordable(items, budget):  # EXTENSION 4: window-shopping, no buying.
+    for item in items:
+        if item.price() <= budget:  # Read-only: compare, print, change nothing.
+            print(item.describe())
+
 
 # ACT 5: The complete story, from the first choice to the ending.
 def main():
     print("=== THE ROLEX RESCUE ===")
-    menu = [Rolex(), Kikomando("Kikomando"), FeaturedRolex(), HomePackedLunch()]
+    menu = [
+        create_choice("rolex"),
+        create_choice("kikomando"),
+        FeaturedRolex(),
+        create_choice("home_packed_lunch"),
+    ]
     show_menu(menu)  # The unrelated packed lunch works too: duck typing.
     sarah = LunchBreak("Sarah", 5000)
     joel = LunchBreak("Joel", 3000)  # A second object has a DIFFERENT wallet.
