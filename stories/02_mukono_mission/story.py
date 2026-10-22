@@ -25,7 +25,17 @@ class TripPurse:
         self.balance = self.balance - fare
         return True
 
+    
+# EXTENSION 2: Transport money top up
+    def top_up(self, amount):
+        "Adds a positive monetary amount to the balance."
+        "ReturnsTrue if succesfull, False if zero or negative"
+        if amount > 0:
+            self.balance +=amount
+            return True
+        return False
 
+    
 # ACT 2: All transport must quote a fare, but the calculation can differ.
 class Transport(ABC):
     currency = "UGX"  # Shared class attribute.
@@ -69,6 +79,15 @@ class CheerfulMixin:
 class CheerfulStudentBoda(CheerfulMixin, StudentBoda):
     pass  # Hybrid hierarchy. super() follows this object's MRO.
 
+# EXTENSION 3: A free lift and a walk with a friend
+class CousinLift:
+    def __init__(self, name="Cousin's car"):
+        self.name = name
+
+    def describe(self):
+        return f"{self.name} Free lift from family, zero stress."
+    def quote_fare(self, distance):
+            return 0
 
 class WalkWithFriend:  # No Transport parent: duck typing in the same story.
     name = "Walk with a friend"
@@ -107,6 +126,16 @@ def compare(options, distance):  # Function, parameter, loop: Week 1 tools.
     for option in options:
         print(option.describe())
         print(f"Quote: UGX {option.quote_fare(distance):,}")  # Polymorphism.
+
+def cheapest(options, distance):
+    best = None
+    best_fare = None
+    for option in options:
+        fare = option.quote_fare(distance)
+        if best is None or fare < best_fare:
+            best = option
+            best_fare = fare
+    return best
 
 
 def main():
