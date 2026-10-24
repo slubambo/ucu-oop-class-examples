@@ -3,6 +3,16 @@ Run: python3 story.py. All acts and timings are fictional classroom examples.
 """
 from abc import ABC, abstractmethod
 
+class ShowChoiceError(Exception):
+    """The selected object is not a usable talent-show act."""
+
+
+class ShowRequestError(Exception):
+    """The act contains an invalid booking request."""
+
+
+class ShowResourceError(Exception):
+    """The show does not have enough time for a valid act."""
 
 # ACT 1: Time is a resource with a rule: don't schedule negative minutes.
 class ShowClock:
@@ -23,6 +33,14 @@ class ShowClock:
         if minutes <= 0 or minutes > self.remaining:
             return False
         self.remaining = self.remaining - minutes
+        return True
+
+    
+    def extend(self, minutes):
+        if minutes <= 0:
+            return False
+
+        self.remaining = self.remaining + minutes
         return True
 
 
@@ -48,6 +66,10 @@ class Dance(Performance):  # IS-A Performance: single inheritance.
 
     def duration(self):
         return self.minutes  # Override the abstract method.
+
+class Comedy(Performance):
+    def duration(self):
+        return 2
 
 
 class Poetry(Performance):  # Shared parent: hierarchical inheritance.
@@ -79,6 +101,18 @@ class AudienceWave:  # No Performance inheritance: the shared behaviour is enoug
     def describe(self):
         return "Audience wave: one minute, everybody gets to be famous."
 
+class ThankYouSpeech:
+    def __init__(self, name):
+        self.name = name
+
+    def duration(self):
+        return 1
+
+    def describe(self):
+        return (
+            f"{self.name}: one-minute thank-you speech "
+            "at UCU student talent afternoon."
+        )
 
 # ACT 4: The show HAS-A clock; it borrows and swaps performance objects.
 class TalentShow:
@@ -99,6 +133,75 @@ class TalentShow:
             self._lineup.append(performance)  # Collaborating objects in a collection.
             return f"MC {self.mc} books {performance.name}."
         return f"No slot for {performance.name}. The timetable has entered the chat."
+
+    def cancel_last(self):
+        if not self._lineup:
+            return False
+
+        last = self._lineup.pop()
+        self.clock.remaining += last.duration()
+        return True
+
+    def running_order(self):
+        if not self._lineup:
+            return (
+                f"No acts booked. Acts: 0. "
+                f"Minutes left: {self.clock.remaining}."
+            )
+
+        names = ", ".join(performance.name for performance in self._lineup)
+        return (
+            f"Running order: {names}. "
+            f"Acts: {self.act_count}. "
+            f"Minutes left: {self.clock.remaining}."
+        )
+class StrictTalentShow(TalentShow):
+    """TalentShow variant that explains rejected bookings with exceptions."""
+
+    def safe_book(self, performance):
+        if performance is None:
+            raise ShowChoiceError(
+                "The selected choice cannot be None."
+            )
+
+        if not hasattr(performance, "name"):
+            raise ShowChoiceError(
+                "The selected choice must have a name."
+            )
+
+        duration_method = getattr(performance, "duration", None)
+        if not callable(duration_method):
+            raise ShowChoiceError(
+                "The selected choice must provide duration()."
+            )
+
+        try:
+            minutes = duration_method()
+        except Exception as error:
+            raise ShowRequestError(
+                "The act duration could not be calculated."
+            ) from error
+
+        if (
+            isinstance(minutes, bool)
+            or not isinstance(minutes, (int, float))
+            or minutes <= 0
+        ):
+            raise ShowRequestError(
+                "An act duration must be a positive number."
+            )
+
+        if minutes > self.clock.remaining:
+            raise ShowResourceError(
+                f"The act needs {minutes} minutes, but only "
+                f"{self.clock.remaining} remain."
+            )
+
+        self.performance = performance
+        self.clock.reserve(minutes)
+        self._lineup.append(performance)
+
+        return f"MC {self.mc} books {performance.name}."
 
 
 def audition(performances):  # Week 1's function, parameters, list, and loop.
