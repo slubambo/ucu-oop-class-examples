@@ -25,6 +25,12 @@ class DataBundle:
         self.remaining = self.remaining - amount
         return True
 
+    def add_data(self, amount):  # Accept only positive data shares.
+        if amount <= 0:
+            return False
+        self.remaining = self.remaining + amount
+        return True
+
 
 # ACT 2: Every entertainment option answers the same two questions.
 class Entertainment(ABC):
@@ -53,6 +59,11 @@ class StreamedMovie(Entertainment):  # Single inheritance: IS-A Entertainment.
 class MusicSession(Entertainment):  # Sibling: hierarchical inheritance.
     def data_cost(self):
         return 100
+
+
+class ComedyClip(Entertainment):  # Short comedy clip with a fixed data cost.
+    def data_cost(self):
+        return 50
 
 
 class DataSaverMovie(StreamedMovie):  # Three levels: multilevel inheritance.
@@ -110,7 +121,8 @@ def main():
     print("=== HOSTEL MOVIE NIGHT ===")
     print("Faith promised a movie night. Her bundle has other ideas.")
     options = [StreamedMovie("Mukono Mystery"), MusicSession("Afrobeats break"),
-               FeaturedMovie("Mukono Mystery: data saver"), StorytellingCircle()]
+               FeaturedMovie("Mukono Mystery: data saver"), StorytellingCircle(),
+               ComedyClip("Campus comedy clip")]
     show_options(options)  # StorytellingCircle works too: duck typing.
     faith = MovieNight("Faith", 500)
     david = MovieNight("David", 200)  # Separate bundles; no shared list bug.
