@@ -55,6 +55,11 @@ class MusicSession(Entertainment):  # Sibling: hierarchical inheritance.
         return 100
 
 
+class ComedyClip(Entertainment):  # Short comedy clip with a fixed data cost.
+    def data_cost(self):
+        return 50
+
+
 class DataSaverMovie(StreamedMovie):  # Three levels: multilevel inheritance.
     def data_cost(self):
         return super().data_cost() // 2  # Extend, rather than duplicate, pricing.
