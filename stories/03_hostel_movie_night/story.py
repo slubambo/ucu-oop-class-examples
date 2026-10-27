@@ -2,6 +2,7 @@
 Run: python3 story.py. Data costs are invented, not provider estimates.
 """
 from abc import ABC, abstractmethod
+import re
 
 
 # ACT 1: Data belongs to an object that controls how much can be used.
@@ -24,6 +25,8 @@ class DataBundle:
             return False
         self.remaining = self.remaining - amount
         return True
+
+   
 
 
 # ACT 2: Every entertainment option answers the same two questions.
@@ -79,6 +82,24 @@ class StorytellingCircle:  # Unrelated class with the expected methods.
     def describe(self):
         return "Storytelling circle: zero MB, unlimited plot twists."
 
+# A duck-typed board game that works with the movie-night interface.
+class BoardGame:
+    def __init__(self):
+        self.title = "Ludo night"
+
+    def data_cost(self):
+        return 0
+
+    def describe(self):
+        return "Ludo night: zero MB, and friendly competition."
+
+# Return options that fit the data budget without playing or changing them
+def available(options, megabytes):
+        return [
+            option for option in options
+            if option.data_cost() <= megabytes
+        ]
+
 
 # ACT 4: MovieNight HAS-A bundle; it is not a kind of bundle.
 class MovieNight:
@@ -104,6 +125,51 @@ class MovieNight:
 def show_options(options):  # Week 1 function + list + loop.
     for option in options:
         print(option.describe())  # Same call, different results: polymorphism.
+
+
+# Later-topic contribution — Kevin Ninsiima:
+# A4 factory keeps choice creation separate from MovieNight coordination.
+def create_choice(key, **settings):
+    if key == "movie":
+        return StreamedMovie(
+            settings.get("title", "Untitled movie"),
+            settings.get("megabytes", 700),
+        )
+    if key == "music":
+        return MusicSession(settings.get("title", "Music session"))
+    if key == "story":
+        return StorytellingCircle()
+    raise ValueError(f"Unknown entertainment choice: {key}")
+
+
+# Later-topic contribution — David:
+# A2 strict coordinator that validates requests before changing MovieNight state.
+class MovieRequestError(Exception):
+    """Base error for invalid movie night requests."""
+
+
+class MovieChoiceError(MovieRequestError):
+    """Raised when no activity is chosen."""
+
+
+class MovieResourceError(MovieRequestError):
+    """Raised when the bundle cannot cover the activity."""
+
+
+class StrictMovieNight(MovieNight):
+    def safe_enjoy(self, choice):
+        if choice is None:
+            raise MovieChoiceError("Choose an activity before starting movie night.")
+
+        needed = choice.data_cost()
+        if type(needed) is not int or needed < 0:
+            raise MovieRequestError("The activity must quote a non-negative whole MB cost.")
+        if needed > self.bundle.remaining:
+            raise MovieResourceError(
+                f"{choice.title} needs {needed} MB, but only "
+                f"{self.bundle.remaining} MB remains."
+            )
+        return super().enjoy(choice)
 
 
 def main():
