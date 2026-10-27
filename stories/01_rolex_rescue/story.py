@@ -27,6 +27,7 @@ class LunchWallet:
         return True
 
 
+
 # ACT 2: Meal states WHAT every menu item must do; children supply HOW.
 class Meal(ABC):
     currency = "UGX"  # Class attribute: shared; name belongs to each instance.
@@ -103,10 +104,23 @@ class LunchBreak:
             return f"{self.student} gets {meal.name}. Lunch is saved!"
         return f"{self.student}: {meal.name} is over budget. We shall admire it."
 
+    def receipt(self):  # EXTENSION 5: a readable, read-only summary.
+        names = ", ".join(meal.name for meal in self._orders)
+        if not names:
+            names = "nothing yet"
+        return (f"Receipt for {self.student}: {self.order_count} order(s) "
+                f"({names}); balance left UGX {self.wallet.balance:,}.")
+
 
 def show_menu(items):  # Ordinary function; a list + loop recall Week 1.
     for item in items:
         print(item.describe())  # Polymorphism: SAME call, DIFFERENT results.
+
+
+def show_affordable(items, budget):  # EXTENSION 4: window-shopping, no buying.
+    for item in items:
+        if item.price() <= budget:  # Read-only: compare, print, change nothing.
+            print(item.describe())
 
 
 # ACT 5: The complete story, from the first choice to the ending.
