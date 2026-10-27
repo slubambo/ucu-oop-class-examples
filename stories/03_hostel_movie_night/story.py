@@ -92,6 +92,16 @@ class MovieNight:
     def activities(self):  # Read-only; a count derived from the real list.
         return len(self._watched)
 
+    #make an addition to the work Erima T.A
+    def recap(self):
+        if not self._watched:
+            return {
+                "message": "No activities yet.",
+                "titles": [],
+                "activities": 0,
+                "remaining": self.bundle.remaining,
+            }
+
     def enjoy(self, entertainment):
         self.entertainment = entertainment  # Borrowed, swappable: aggregation.
         needed = entertainment.data_cost()  # Abstraction: HOW is hidden here.
@@ -105,6 +115,36 @@ def show_options(options):  # Week 1 function + list + loop.
     for option in options:
         print(option.describe())  # Same call, different results: polymorphism.
 
+# Erima T Ayikobua:.
+class DataAmount:
+    def __init__(self, amount):
+        if type(amount) is not int or amount < 0:
+            raise ValueError("DataAmount requires a non-negative whole number.")
+        self.__amount = amount
+
+    @property
+    def amount(self):
+        return self.__amount
+
+    def __str__(self):
+        return f"{self.amount:,} MB"
+
+    def __repr__(self):
+        return f"DataAmount({self.amount})"
+
+    def __eq__(self, other):
+        if not isinstance(other, DataAmount):
+            return NotImplemented
+        return self.amount == other.amount
+
+    def __add__(self, other):
+        if not isinstance(other, DataAmount):
+            return NotImplemented
+        return DataAmount(self.amount + other.amount)
+
+def show_options(options):  # Week 1 function + list + loop.
+    for option in options:
+        print(option.describe())  # Same call, different results: polymorphism.
 
 def main():
     print("=== HOSTEL MOVIE NIGHT ===")
