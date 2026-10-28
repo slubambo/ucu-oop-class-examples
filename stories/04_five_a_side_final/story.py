@@ -24,8 +24,14 @@ class EnergyTank:
             return False
         self.remaining = self.remaining - amount
         return True
+        
+    def recover(self, amount):
+        if amount <= 0 or (self.remaining + amount) > 100:
+            return False
+        self.remaining = self.remaining + amount
+        return True
 
-
+    
 # ACT 2: An attack must say what effort it needs; players can choose the style.
 class Attack(ABC):
     team = "Mukono Meteors"  # Shared class state; each attack has its own name.
@@ -78,9 +84,19 @@ class WaterBreak:  # Unrelated to Attack but supports the same calls.
 
     def describe(self):
         return "Water break: tactical discussion, zero energy cost in this model."
+    
 
 
 # ACT 4: The match HAS-A tank; actions are borrowed collaborators.
+# EXTENSION 3: TeamHuddle demonstrates duck typing.
+class TeamHuddle:
+    name = "Team huddle"
+
+    def effort(self):
+        return 0
+
+    def describe(self):
+        return "Team huddle: tactical discussion, zero energy cost."
 class Match:
     def __init__(self, captain, points):
         self.captain = captain
@@ -106,11 +122,18 @@ def discuss_tactics(actions):  # Week 1 function, parameter, list, for loop.
         print(action.describe())  # Polymorphism: one request, varied responses.
 
 
+class TrainedDribble(SmartDribble):
+    
+    def effort(self):
+        # Reuses SmartDribble's effort (which is 20) and subtracts 5
+        return super().effort() - 5        
+
+
 def main():
     print("=== THE FIVE-A-SIDE FINAL ===")
     print("One final attack. Brian wants skills; the energy tank wants teamwork.")
     actions = [Dribble("Brian"), TeamPass("Quick team pass"),
-               CrowdFavourite("Achen"), WaterBreak()]
+               CrowdFavourite("Achen"), WaterBreak(),TrainedDribble("Brian")]
     discuss_tactics(actions)  # WaterBreak fits by behaviour alone: duck typing.
     brian = Match("Brian", 35)
     ruth = Match("Ruth", 40)  # Independent state in a second object.
@@ -118,6 +141,7 @@ def main():
     print(brian.play(actions[0]))  # Refused; 15 cannot pay 30.
     print(brian.play(actions[1]))  # Teamwork costs 10.
     print(brian.play(actions[3]))  # Change collaborator without changing Match.
+    print(ruth.play(actions[4]))   # TrainedDribble costs 15 (20 - 5).
     print(ruth.play(actions[0]))
     print(f"Brian: {brian.energy.remaining} energy; actions: {brian.completed_actions}")
     print(f"Ruth: {ruth.energy.remaining} energy; actions: {ruth.completed_actions}")
