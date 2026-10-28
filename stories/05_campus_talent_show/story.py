@@ -20,10 +20,18 @@ class ShowClock:
         self.__remaining = amount
 
     def reserve(self, minutes):
-        if minutes <= 0 or minutes > self.remaining:
+        if minutes < 0 or minutes > self.remaining:
             return False
         self.remaining = self.remaining - minutes
         return True
+
+    # Add time only for a positive extension.
+    def extend(self, minutes):
+        if minutes <= 0:
+            return False
+        self.remaining = self.remaining + minutes
+        return True
+
 
 
 # ACT 2: Every performance must tell the MC its duration.
@@ -60,6 +68,13 @@ class ShortDance(Dance):  # Performance -> Dance -> ShortDance: multilevel.
         return super().duration() // 2  # Extend a parent's implementation.
 
 
+class LightningDance(ShortDance):
+    """A short dance that never advertises less than one minute."""
+
+    def duration(self):
+        return max(1, super().duration() - 1)
+
+
 # ACT 3: One extra capability joins the existing dance family.
 class ApplauseMixin:
     def describe(self):
@@ -80,7 +95,22 @@ class AudienceWave:  # No Performance inheritance: the shared behaviour is enoug
         return "Audience wave: one minute, everybody gets to be famous."
 
 
+
+
+
 # ACT 4: The show HAS-A clock; it borrows and swaps performance objects.
+class ShowChoiceError(Exception):
+    """Raised when no choice is supplied for a booking."""
+
+
+class ShowRequestError(Exception):
+    """Raised when a choice calculates an invalid requirement."""
+
+
+class ShowResourceError(Exception):
+    """Raised when a valid requirement exceeds the remaining show time."""
+
+
 class TalentShow:
     def __init__(self, mc, minutes):
         self.mc = mc
@@ -99,6 +129,32 @@ class TalentShow:
             self._lineup.append(performance)  # Collaborating objects in a collection.
             return f"MC {self.mc} books {performance.name}."
         return f"No slot for {performance.name}. The timetable has entered the chat."
+
+    def running_order(self):
+        # Report the lineup and remaining time without changing the show.
+        names = [performance.name for performance in self._lineup]
+        return {
+            "names": names,
+            "count": self.act_count,
+            "minutes_left": self.clock.remaining,
+            "message": "No acts booked." if not names else None,
+        }
+
+
+class StrictTalentShow(TalentShow):
+    def safe_book(self, choice):
+        if choice is None:
+            raise ShowChoiceError("Choose a performance before booking.")
+
+        minutes = choice.duration()
+        if minutes < 0:
+            raise ShowRequestError("A performance cannot require negative minutes.")
+        if minutes > self.clock.remaining:
+            raise ShowResourceError(
+                f"The performance needs {minutes} minutes, but only "
+                f"{self.clock.remaining} remain."
+            )
+        return self.book(choice)
 
 
 def audition(performances):  # Week 1's function, parameters, list, and loop.
@@ -129,3 +185,24 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# EXTENSION 1: COMEDY DUO
+class Comedy(Performance):
+    # Comedy is a Performance whose set always lasts two minutes.
+    def duration(self):
+        return 2
+
+
+def run_comedy_extension():
+    comedy = Comedy("Comedy duo")
+    audition_list = [comedy]
+    audition(audition_list)
+
+    show = TalentShow("Joel", 5)
+    print(show.book(comedy))
+    print(f"Minutes left: {show.clock.remaining}; acts booked: {show.act_count}")
+
+
+if __name__ == "__main__":
+    run_comedy_extension()
