@@ -2,6 +2,8 @@
 Run: python3 story.py. All acts and timings are fictional classroom examples.
 """
 from abc import ABC, abstractmethod
+from fair_running_order import FairRunningOrderPlanner
+from stage_time import StageTime
 
 
 # ACT 1: Time is a resource with a rule: don't schedule negative minutes.
@@ -60,6 +62,12 @@ class ShortDance(Dance):  # Performance -> Dance -> ShortDance: multilevel.
         return super().duration() // 2  # Extend a parent's implementation.
 
 
+class LightningDance(ShortDance):  # Extension 6: a faster ShortDance.
+    def duration(self):
+        # Use the parent duration, reduce it by one minute, and never go below 1.
+        return max(1, super().duration() - 1)
+
+
 # ACT 3: One extra capability joins the existing dance family.
 class ApplauseMixin:
     def describe(self):
@@ -99,6 +107,43 @@ class TalentShow:
             self._lineup.append(performance)  # Collaborating objects in a collection.
             return f"MC {self.mc} books {performance.name}."
         return f"No slot for {performance.name}. The timetable has entered the chat."
+      
+    
+    def show_lineup(self):
+        if not self._lineup:
+            return "No performances have been booked yet."
+
+        lineup = [performance.describe()
+                  for performance in self._lineup]
+
+        return "Show Lineup:\n" + "\n".join(lineup)
+
+    def running_order(self):
+        """Return the booked names, count, and minutes remaining."""
+        if not self._lineup:
+            return "No performances have been booked yet."
+
+        names = "\n".join(
+            f"{number}. {performance.name}"
+            for number, performance in enumerate(self._lineup, start=1)
+        )
+        return (f"Running order:\n{names}\n"
+                f"Count: {self.act_count}\n"
+                f"Minutes left: {self.clock.remaining}")
+
+    def preview_total(self, choices):
+        total = StageTime(0)
+        for choice in choices:
+            total = total + StageTime(choice.duration())
+        return total
+
+    def plan_and_book(self, performer_acts):
+        plan = FairRunningOrderPlanner().plan(
+            performer_acts, self.clock.remaining
+        )
+        for act in plan.scheduled:
+            self.book(act.performance)
+        return plan
 
 
 def audition(performances):  # Week 1's function, parameters, list, and loop.
