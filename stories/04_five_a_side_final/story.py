@@ -3,6 +3,25 @@ Run: python3 story.py. Energy costs and match events are a toy simulation.
 """
 from abc import ABC, abstractmethod
 
+# A2: Custom exceptions for match rules
+
+class InvalidEnergyError(ValueError):
+    """Raised when energy is outside the allowed range."""
+    pass
+
+
+class InvalidEffortError(ValueError):
+    """Raised when an attack has an invalid energy cost."""
+    pass
+
+
+class InsufficientEnergyError(Exception):
+    """Raised when a player cannot afford an attack."""
+    pass
+
+
+
+
 
 # ACT 1: Energy and its rules stay together in one object.
 class EnergyTank:
@@ -13,19 +32,30 @@ class EnergyTank:
     def remaining(self):
         return self.__remaining  # Name mangling reduces accidental access.
 
+   
+ 
     @remaining.setter
     def remaining(self, amount):
-        if amount < 0 or amount > 100:
-            raise ValueError("Energy must stay between 0 and 100.")
-        self.__remaining = amount  # No change until checks pass.
+      if amount < 0 or amount > 100:
+        raise InvalidEnergyError(
+            "Energy must stay between 0 and 100."
+        )
+      self.__remaining = amount  # No change until checks pass.
+
 
     def spend(self, amount):
         if amount <= 0 or amount > self.remaining:
             return False
         self.remaining = self.remaining - amount
         return True
+        
+    def recover(self, amount):
+        if amount <= 0 or (self.remaining + amount) > 100:
+            return False
+        self.remaining = self.remaining + amount
+        return True
 
-
+    
 # ACT 2: An attack must say what effort it needs; players can choose the style.
 class Attack(ABC):
     team = "Mukono Meteors"  # Shared class state; each attack has its own name.
@@ -78,9 +108,19 @@ class WaterBreak:  # Unrelated to Attack but supports the same calls.
 
     def describe(self):
         return "Water break: tactical discussion, zero energy cost in this model."
+    
 
 
 # ACT 4: The match HAS-A tank; actions are borrowed collaborators.
+# EXTENSION 3: TeamHuddle demonstrates duck typing.
+class TeamHuddle:
+    name = "Team huddle"
+
+    def effort(self):
+        return 0
+
+    def describe(self):
+        return "Team huddle: tactical discussion, zero energy cost."
 class Match:
     def __init__(self, captain, points):
         self.captain = captain
@@ -99,6 +139,24 @@ class Match:
             self._actions.append(action)  # A list of objects: collaboration.
             return f"Captain {self.captain} chooses {action.name}. Done!"
         return f"Not enough energy for {action.name}. Pass the ball, please!"
+
+
+class StrictMatch(Match):
+
+    def play(self, action):
+        effort = action.effort()
+
+        if effort < 0:
+            raise InvalidEffortError(
+                "An attack cannot have negative energy cost."
+            )
+
+        if effort > 0 and effort > self.energy.remaining:
+            raise InsufficientEnergyError(
+                f"Not enough energy for {action.name}."
+            )
+
+        return super().play(action)
 
 
 def discuss_tactics(actions):  # Week 1 function, parameter, list, for loop.
