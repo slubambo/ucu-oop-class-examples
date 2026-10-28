@@ -4,6 +4,20 @@ Run: python3 story.py. Energy costs and match events are a toy simulation.
 from abc import ABC, abstractmethod
 
 
+class MatchChoiceError(Exception):
+    """Raised when no valid match choice is provided."""
+    pass
+
+
+class MatchRequestError(Exception):
+    """Raised when a match action has an invalid effort request."""
+    pass
+
+
+class MatchResourceError(Exception):
+    """Raised when a valid action needs more energy than is available."""
+    pass
+
 # ACT 1: Energy and its rules stay together in one object.
 class EnergyTank:
     def __init__(self, points):
@@ -100,17 +114,65 @@ class Match:
             return f"Captain {self.captain} chooses {action.name}. Done!"
         return f"Not enough energy for {action.name}. Pass the ball, please!"
 
+class StrictMatch(Match):
+    """A match that validates choices before playing them."""
+
+    def safe_play(self, choice):
+        # 1. Check that a choice was provided.
+        if choice is None:
+            raise MatchChoiceError("No match choice was provided.")
+
+        # 2. Check that the choice can report its effort.
+        if not callable(getattr(choice, "effort", None)):
+            raise MatchChoiceError(
+                "The choice must provide an effort() method."
+            )
+
+        # 3. Validate the requested effort before changing match state.
+        try:
+            effort = choice.effort()
+        except Exception as error:
+            raise MatchRequestError(
+                "Could not determine the requested effort."
+            ) from error
+
+        if isinstance(effort, bool) or not isinstance(effort, (int, float)):
+            raise MatchRequestError(
+                "Effort must be a number."
+            )
+
+        if effort < 0 or effort != effort:
+            raise MatchRequestError(
+                "Effort cannot be negative or NaN."
+            )
+
+        # 4. Check available energy before calling play().
+        if effort > 0 and effort > self.energy.remaining:
+            raise MatchResourceError(
+                f"Not enough energy: {effort} needed, "
+                f"{self.energy.remaining} available."
+            )
+
+        # 5. All checks passed. Use the existing Match behaviour.
+        return self.play(choice)
+
 
 def discuss_tactics(actions):  # Week 1 function, parameter, list, for loop.
     for action in actions:
         print(action.describe())  # Polymorphism: one request, varied responses.
+
+class TrainedDribble(SmartDribble):
+    
+    def effort(self):
+        # Reuses SmartDribble's effort (which is 20) and subtracts 5
+        return super().effort() - 5  
 
 
 def main():
     print("=== THE FIVE-A-SIDE FINAL ===")
     print("One final attack. Brian wants skills; the energy tank wants teamwork.")
     actions = [Dribble("Brian"), TeamPass("Quick team pass"),
-               CrowdFavourite("Achen"), WaterBreak()]
+               CrowdFavourite("Achen"), WaterBreak(), TrainedDribble("Brian")] 
     discuss_tactics(actions)  # WaterBreak fits by behaviour alone: duck typing.
     brian = Match("Brian", 35)
     ruth = Match("Ruth", 40)  # Independent state in a second object.
@@ -118,6 +180,7 @@ def main():
     print(brian.play(actions[0]))  # Refused; 15 cannot pay 30.
     print(brian.play(actions[1]))  # Teamwork costs 10.
     print(brian.play(actions[3]))  # Change collaborator without changing Match.
+    print(ruth.play(actions[4]))   # TrainedDribble costs 15 (20 - 5).
     print(ruth.play(actions[0]))
     print(f"Brian: {brian.energy.remaining} energy; actions: {brian.completed_actions}")
     print(f"Ruth: {ruth.energy.remaining} energy; actions: {ruth.completed_actions}")
