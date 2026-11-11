@@ -1,6 +1,8 @@
 # The Five-a-Side Final: group extensions
 
-**Due: Thursday, 15 October 2026.**
+**Foundation stage: one extension per member.**
+
+**Combined deadline: end of Wednesday, 21 October 2026, Uganda time.** Keep completed foundation work and its PR evidence. Your group must also choose three [later-topic extensions](ADVANCED_EXTENSIONS.md).
 
 Your group works on this story only. There are six choices below.
 
@@ -66,8 +68,8 @@ Add can_play(action) to Match. Return whether its non-negative effort fits, with
 
 - All chosen extensions work together on the group fork's `main` branch.
 - The original story still runs, and every member's demo runs from the final `main` branch.
-- Each member has their own commit and merged pull request.
+- Each member has their own foundation commit and merged pull request, plus a later-topic contribution as described in the common instructions.
 - Every pull request has a useful review comment from each of its author's teammates.
 - Your group has completed `GROUP.md` with the member, task, branch and pull request links.
 
-Submit one link to your group fork. See the [full submission checklist](../../GROUP_ASSIGNMENT.md#10-submit-your-group-work).
+The foundation work is one part of the combined assignment. Submit one link to your group fork. See the [full submission checklist](../../GROUP_ASSIGNMENT.md#10-submit-your-group-work).

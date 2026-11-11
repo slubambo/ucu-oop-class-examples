@@ -1,0 +1,22 @@
+=== MUKONO MARKET BASKET ===
+Kato is shopping for the hostel cooking group. The shopping list is longer than the budget.
+Matooke bundle needs 3,000 UGX.
+Groundnut pack needs 2,000 UGX.
+Mukono market special! Shared matooke bundle needs 2,500 UGX.
+Garden gift: 0 UGX in this classroom model.
+Kato completes Shared matooke bundle: 2,500 UGX.
+Kato completes Matooke bundle: 3,000 UGX.
+Not enough UGX for Matooke bundle. Nothing recorded.
+Kato completes Garden gift: 0 UGX.
+Alex completes Groundnut pack: 2,000 UGX.
+Kato: 1,500 UGX; completed: 3
+Alex: 5,000 UGX; completed: 1
+MRO (method lookup order):
+FeaturedBundle
+MarketHype
+SharedMatooke
+MatookeBundle
+MarketItem
+ABC
+object
+Ending: The basket has dinner ingredients, and no one has promised money they do not have.

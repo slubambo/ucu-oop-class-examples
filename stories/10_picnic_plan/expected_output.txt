@@ -1,0 +1,22 @@
+=== THE MABIRA PICNIC PLAN ===
+Faith is planning a fictional student picnic near Mabira. Activities must finish before the group leaves.
+Nature walk needs 20 minutes.
+Team quiz needs 15 minutes.
+The picnic team is ready! Short nature walk needs 10 minutes.
+Group photo: 5 minutes in this classroom model.
+Faith completes Short nature walk: 10 minutes.
+Faith completes Nature walk: 20 minutes.
+Not enough minutes for Nature walk. Nothing recorded.
+Faith completes Group photo: 5 minutes.
+Alex completes Team quiz: 15 minutes.
+Faith: 5 minutes; completed: 3
+Alex: 25 minutes; completed: 1
+MRO (method lookup order):
+FeaturedWalk
+PicnicHype
+ShortWalk
+NatureWalk
+PicnicActivity
+ABC
+object
+Ending: The group has enjoyed the picnic and can leave on time.

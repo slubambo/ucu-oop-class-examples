@@ -1,0 +1,22 @@
+=== THE HOSTEL GAMES EVENING ===
+Achen is running a hostel games evening. The group has limited game credits and many challengers.
+Football game needs 6 credits.
+Ludo round needs 2 credits.
+Controllers ready! Practice football game needs 3 credits.
+Cheering contest: 0 credits in this classroom model.
+Achen completes Practice football game: 3 credits.
+Achen completes Football game: 6 credits.
+Not enough credits for Football game. Nothing recorded.
+Achen completes Cheering contest: 0 credits.
+Alex completes Ludo round: 2 credits.
+Achen: 1 credits; completed: 3
+Alex: 8 credits; completed: 1
+MRO (method lookup order):
+FeaturedPractice
+GamesHype
+PracticeGame
+FootballGame
+GameChoice
+ABC
+object
+Ending: Everyone has a turn, and the credit counter still tells the truth.

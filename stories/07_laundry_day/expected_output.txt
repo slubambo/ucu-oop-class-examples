@@ -1,0 +1,22 @@
+=== LAUNDRY DAY BEFORE THE PRESENTATION ===
+Nambi needs clean clothes for a presentation. The hostel water tank is nearly empty.
+Machine wash needs 10 litres.
+Hand rinse needs 4 litres.
+Fresh clothes, fresh start! Eco wash needs 5 litres.
+Sun drying: 0 litres in this classroom model.
+Nambi completes Eco wash: 5 litres.
+Nambi completes Machine wash: 10 litres.
+Not enough litres for Machine wash. Nothing recorded.
+Nambi completes Sun drying: 0 litres.
+Alex completes Hand rinse: 4 litres.
+Nambi: 3 litres; completed: 3
+Alex: 14 litres; completed: 1
+MRO (method lookup order):
+FeaturedEcoWash
+LaundryHype
+EcoWash
+MachineWash
+LaundryChoice
+ABC
+object
+Ending: The clothes are ready, and the remaining water is enough for the next person.
