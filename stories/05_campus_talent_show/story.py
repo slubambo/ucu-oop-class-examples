@@ -152,6 +152,37 @@ class TalentShow:
         return f"No slot for {performance.name}. The timetable has entered the chat."
 
 
+class ShowChoiceError(Exception):
+    """Raised when a strict booking has no choice to evaluate."""
+
+
+class ShowRequestError(Exception):
+    """Raised when a choice requests an invalid amount of stage time."""
+
+
+class ShowResourceError(Exception):
+    """Raised when a valid request exceeds the available stage time."""
+
+
+class StrictTalentShow(TalentShow):
+    def safe_book(self, choice):
+        if choice is None:
+            raise ShowChoiceError("A performance choice is required.")
+
+        minutes = choice.duration()
+        if minutes < 0:
+            raise ShowRequestError("A performance cannot request negative minutes.")
+        if minutes > self.clock.remaining:
+            raise ShowResourceError("The performance does not fit the remaining time.")
+
+        if minutes == 0:
+            self.performance = choice
+            self._lineup.append(choice)
+            return f"MC {self.mc} books {choice.name}."
+
+        return super().book(choice)
+
+
 def audition(performances):  # Week 1's function, parameters, list, and loop.
     for performance in performances:
         print(performance.describe())  # One call, many versions: polymorphism.
