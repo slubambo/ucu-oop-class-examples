@@ -4,6 +4,33 @@ Run: python3 story.py. All acts and timings are fictional classroom examples.
 from abc import ABC, abstractmethod
 
 
+class StageTime:
+    def __init__(self, amount):
+        if type(amount) is not int or amount < 0:
+            raise ValueError("Stage time must be a non-negative whole number of minutes.")
+        self.__amount = amount
+
+    @property
+    def amount(self):
+        return self.__amount
+
+    def __str__(self):
+        return f"{self.amount:,} minutes"
+
+    def __repr__(self):
+        return f"StageTime({self.amount})"
+
+    def __eq__(self, other):
+        if not isinstance(other, StageTime):
+            return NotImplemented
+        return self.amount == other.amount
+
+    def __add__(self, other):
+        if not isinstance(other, StageTime):
+            return NotImplemented
+        return StageTime(self.amount + other.amount)
+
+
 # ACT 1: Time is a resource with a rule: don't schedule negative minutes.
 class ShowClock:
     def __init__(self, minutes):
@@ -99,6 +126,12 @@ class TalentShow:
             self._lineup.append(performance)  # Collaborating objects in a collection.
             return f"MC {self.mc} books {performance.name}."
         return f"No slot for {performance.name}. The timetable has entered the chat."
+
+    def preview_total(self, choices):
+        total = StageTime(0)
+        for choice in choices:
+            total = total + StageTime(choice.duration())
+        return total
 
 
 def audition(performances):  # Week 1's function, parameters, list, and loop.
