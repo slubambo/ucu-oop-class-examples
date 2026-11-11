@@ -4,6 +4,41 @@ Run: python3 story.py. All acts and timings are fictional classroom examples.
 from abc import ABC, abstractmethod
 
 
+class StageTime:
+    """An immutable, non-negative whole number of show minutes."""
+    __slots__ = ("_amount",)
+
+    def __init__(self, amount):
+        if isinstance(amount, bool) or not isinstance(amount, int):
+            raise TypeError("StageTime amount must be a whole number of minutes.")
+        if amount < 0:
+            raise ValueError("StageTime amount cannot be negative.")
+        object.__setattr__(self, "_amount", amount)
+
+    @property
+    def amount(self):
+        return self._amount
+
+    def __setattr__(self, name, value):
+        raise AttributeError("StageTime values are immutable.")
+
+    def __str__(self):
+        return f"{self.amount:,} minutes"
+
+    def __repr__(self):
+        return f"StageTime({self.amount})"
+
+    def __eq__(self, other):
+        if not isinstance(other, StageTime):
+            return NotImplemented
+        return self.amount == other.amount
+
+    def __add__(self, other):
+        if not isinstance(other, StageTime):
+            return NotImplemented
+        return StageTime(self.amount + other.amount)
+
+
 # ACT 1: Time is a resource with a rule: don't schedule negative minutes.
 class ShowClock:
     def __init__(self, minutes):
@@ -23,6 +58,13 @@ class ShowClock:
         if minutes <= 0 or minutes > self.remaining:
             return False
         self.remaining = self.remaining - minutes
+        return True
+
+    # Extension 2: The MC gets extra time. A positive value adds minutes.
+    def extend(self, minutes):
+        if minutes <= 0:
+            return False
+        self.remaining = self.remaining + minutes
         return True
 
 
@@ -60,6 +102,12 @@ class ShortDance(Dance):  # Performance -> Dance -> ShortDance: multilevel.
         return super().duration() // 2  # Extend a parent's implementation.
 
 
+class LightningDance(ShortDance):
+    """A very quick dance that is still at least one minute long."""
+    def duration(self):
+        return max(1, super().duration() - 1)
+
+
 # ACT 3: One extra capability joins the existing dance family.
 class ApplauseMixin:
     def describe(self):
@@ -78,6 +126,9 @@ class AudienceWave:  # No Performance inheritance: the shared behaviour is enoug
 
     def describe(self):
         return "Audience wave: one minute, everybody gets to be famous."
+
+    def duration(self):
+        return 1
 
 
 # ACT 4: The show HAS-A clock; it borrows and swaps performance objects.
@@ -99,6 +150,37 @@ class TalentShow:
             self._lineup.append(performance)  # Collaborating objects in a collection.
             return f"MC {self.mc} books {performance.name}."
         return f"No slot for {performance.name}. The timetable has entered the chat."
+
+
+class ShowChoiceError(Exception):
+    """Raised when a strict booking has no choice to evaluate."""
+
+
+class ShowRequestError(Exception):
+    """Raised when a choice requests an invalid amount of stage time."""
+
+
+class ShowResourceError(Exception):
+    """Raised when a valid request exceeds the available stage time."""
+
+
+class StrictTalentShow(TalentShow):
+    def safe_book(self, choice):
+        if choice is None:
+            raise ShowChoiceError("A performance choice is required.")
+
+        minutes = choice.duration()
+        if minutes < 0:
+            raise ShowRequestError("A performance cannot request negative minutes.")
+        if minutes > self.clock.remaining:
+            raise ShowResourceError("The performance does not fit the remaining time.")
+
+        if minutes == 0:
+            self.performance = choice
+            self._lineup.append(choice)
+            return f"MC {self.mc} books {choice.name}."
+
+        return super().book(choice)
 
 
 def audition(performances):  # Week 1's function, parameters, list, and loop.

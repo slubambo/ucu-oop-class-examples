@@ -103,3 +103,15 @@ Choice objects are created outside the coordinator. Passing them in is associati
 | Python refresher | Functions, parameters, defaults, returned values, lists, loops, conditions and arithmetic |
 
 Read [OOP in plain English](../../OOP_IN_PLAIN_ENGLISH.md) for a simple explanation of the terms.
+
+## Strict booking with explained errors
+
+`TalentShow.book()` keeps its original behavior: a request that does not fit returns the story's refusal message. `StrictTalentShow.safe_book()` provides a stricter alternative for callers that need to handle failures explicitly:
+
+- `ShowChoiceError` means no choice was supplied.
+- `ShowRequestError` means the choice calculated a negative duration.
+- `ShowResourceError` means the valid duration exceeds the remaining time.
+
+A choice with a duration of zero is valid in strict mode and is added to the booking history without spending time. Failed strict bookings raise their specific exception before changing the remaining time or successful booking count.
+
+Run the strict-booking example with `py -3 stories/05_campus_talent_show/demo_mulyantimark_s25b13_110.py`. Run its automated checks from the repository root with `py -3 -m unittest discover -s stories/05_campus_talent_show -p "test_*.py"`.
