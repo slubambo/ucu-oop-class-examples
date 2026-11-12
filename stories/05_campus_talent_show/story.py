@@ -99,6 +99,15 @@ class TalentShow:
             self._lineup.append(performance)  # Collaborating objects in a collection.
             return f"MC {self.mc} books {performance.name}."
         return f"No slot for {performance.name}. The timetable has entered the chat."
+    
+    def cancel_last(self):
+        # Cancels the most recently booked act and restores its time.
+        if not self._lineup:
+            return False
+
+        last_act = self._lineup.pop()
+        self.clock.remaining += last_act.duration()
+        return True
 
 
 def audition(performances):  # Week 1's function, parameters, list, and loop.
