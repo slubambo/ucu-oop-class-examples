@@ -40,7 +40,7 @@ The whole story prints without asking you to type anything. Open [expected_outpu
 
 **Act 3 — the special choices.** `ShortDance` extends `Dance`. `HeadlineDance` adds the description from `ApplauseMixin` using multiple inheritance. `AudienceWave` is not in the same family but provides the methods the program needs.
 
-**Act 4 — the coordinator.** `TalentShow` creates and owns a `ShowClock`. It receives a choice object, asks it for its behaviour and lets the resource object check the request. Successful actions go into its own history list. `act_count` reads the length of that list and has no setter.
+**Act 4 — the coordinator.** `TalentShow` creates and owns a `ShowClock`. It receives a choice object, asks it for its behaviour and lets the resource object check the request. Successful actions go into its own history list. `act_count` reads the length of that list and has no setter. `running_order()` reports the booked act names in order, the count and minutes left; a new show reports that no acts are booked yet.
 
 **Act 5 — the complete story.** `main()` creates the objects and runs their actions. Two coordinator objects show that one person's resource and history are separate from another's.
 
