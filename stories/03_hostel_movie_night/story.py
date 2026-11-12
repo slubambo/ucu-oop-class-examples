@@ -3,7 +3,6 @@ Run: python3 story.py. Data costs are invented, not provider estimates.
 """
 from abc import ABC, abstractmethod
 
-
 # ACT 1: Data belongs to an object that controls how much can be used.
 class DataBundle:
     def __init__(self, megabytes):
@@ -24,7 +23,6 @@ class DataBundle:
             return False
         self.remaining = self.remaining - amount
         return True
-
 
 # ACT 2: Every entertainment option answers the same two questions.
 class Entertainment(ABC):
@@ -78,6 +76,17 @@ class StorytellingCircle:  # Unrelated class with the expected methods.
 
     def describe(self):
         return "Storytelling circle: zero MB, unlimited plot twists."
+    # EXTENSION 3: LUDO NIGHT
+    class BoardGame:
+        title = "Ludo"
+
+        def data_cost(self):
+            return 0
+        def describe(self):
+            return "Ludo : zero MB, Unlimited fun."
+
+        def enjoy(self):
+            return f"{self.title} is a fun offline activity for the hostel group."
 
 
 # ACT 4: MovieNight HAS-A bundle; it is not a kind of bundle.
@@ -100,11 +109,21 @@ class MovieNight:
             return f"{self.host}'s group enjoys {entertainment.title}."
         return f"{entertainment.title} needs too much data. Nobody hotspot secretly!"
 
+    def recap(self):
+        if not self._watched:
+            return f"{self.host}'s group has not watched anything"
+        titles =",".join(item.title for item in self._watched)
+        return (f"{self.host}'s recap:{self.activities} activity(ies)."
+                f"({titles});{self.bundle.remaining} MB Left.")
+
 
 def show_options(options):  # Week 1 function + list + loop.
     for option in options:
         print(option.describe())  # Same call, different results: polymorphism.
 
+# Extension 4: In this part, we Return a new list of options whose data_cost fits within the available megabytes without changing inputs.
+def available(options, megabytes):
+    return [option for option in options if option.data_cost() <= megabytes]
 
 def main():
     print("=== HOSTEL MOVIE NIGHT ===")
@@ -125,7 +144,10 @@ def main():
     for parent in FeaturedMovie.__mro__:
         print(parent.__name__)
     print("Ending: the stories are dramatic; the data balance is peaceful.")
+    print("optional extension: Ludo night")
+    ludo = StorytellingCircle.BoardGame()
 
 
 if __name__ == "__main__":
     main()
+
