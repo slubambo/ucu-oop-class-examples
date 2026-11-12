@@ -103,11 +103,34 @@ class LunchBreak:
             return f"{self.student} gets {meal.name}. Lunch is saved!"
         return f"{self.student}: {meal.name} is over budget. We shall admire it."
 
+#Extension 5: First purchase summary (read-only method to generate a receipt)
+    def receipt(self):
+        lines = [f"{self.student}'s lunch receipt","-----------------------------"]
+        if not self._orders:
+            lines.append("No purchases yet.")
+        else:
+            for order in self._orders:
+                lines.append(f"-{order.name}: UGX {order.price():,}")
+            total_spent = sum(order.price() for order in self._orders)
+            lines.append(f"Total spent: UGX {total_spent:,}")
+            lines.append(f"Remaining balance: UGX {self.wallet.balance:,}")
+            lines.append(f"Total items bought: {self.order_count}")
+        return "\n".join(lines)          
 
 def show_menu(items):  # Ordinary function; a list + loop recall Week 1.
     for item in items:
         print(item.describe())  # Polymorphism: SAME call, DIFFERENT results.
 
+
+##Extension 6: Groundnut rolex##
+class GroundnutRolex(Rolex):
+    def __init__(self):
+        super().__init__(eggs=2)
+        self.name = "Groundnut Rolex"
+
+        def price(self):
+            return super().price() +700
+gnut_rolex = GroundnutRolex()
 
 # ACT 5: The complete story, from the first choice to the ending.
 def main():
@@ -116,6 +139,9 @@ def main():
     show_menu(menu)  # The unrelated packed lunch works too: duck typing.
     sarah = LunchBreak("Sarah", 5000)
     joel = LunchBreak("Joel", 3000)  # A second object has a DIFFERENT wallet.
+    jordan = LunchBreak("Jordan", 4000) #object jordan to test the GroundnutRolex class.
+    print(jordan.buy(gnut_rolex))
+    print(f"Jordan's balance: {jordan.wallet.balance}UGX")
     print(sarah.buy(menu[2]))
     print(sarah.buy(menu[1]))  # Refused; balance and order count must stay put.
     print(joel.buy(menu[1]))
