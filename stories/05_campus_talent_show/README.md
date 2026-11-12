@@ -60,6 +60,28 @@ The whole story prints without asking you to type anything. Open [expected_outpu
 
 A refused request changes neither the guarded resource nor the completed-action count.
 
+## Strict booking and typed errors
+
+The original `TalentShow.book()` remains the baseline action. `StrictTalentShow`
+adds `safe_book(choice)` for callers that need a reason when a booking cannot
+proceed: `ShowChoiceError` means no choice was supplied, `ShowRequestError`
+means the calculated duration is negative, and `ShowResourceError` means the
+valid duration exceeds the time left. These checks happen before `book()` can
+spend time or record an act. A zero-minute choice is allowed and can be booked
+without reducing the clock.
+
+Run the friendly-error demo from the repository root:
+
+```sh
+py -3 stories/05_campus_talent_show/demo_MWESIGE_ARNOLD_B33236.py
+```
+
+Run the automated checks with:
+
+```sh
+py -3 stories/05_campus_talent_show/test_strict_talent_show.py
+```
+
 ## How the classes connect
 
 ```mermaid
@@ -72,6 +94,7 @@ classDiagram
     TalentShow *-- ShowClock : owns
     TalentShow --> Performance : uses
     TalentShow --> AudienceWave : uses same methods
+    TalentShow <|-- StrictTalentShow
 ```
 
 `Dance` **is a kind of** `Performance`. That is inheritance.
