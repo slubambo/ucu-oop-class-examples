@@ -129,3 +129,24 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# EXTENSION 1: COMEDY DUO
+class Comedy(Performance):
+    # Comedy is a Performance whose set always lasts two minutes.
+    def duration(self):
+        return 2
+
+
+def run_comedy_extension():
+    comedy = Comedy("Comedy duo")
+    audition_list = [comedy]
+    audition(audition_list)
+
+    show = TalentShow("Joel", 5)
+    print(show.book(comedy))
+    print(f"Minutes left: {show.clock.remaining}; acts booked: {show.act_count}")
+
+
+if __name__ == "__main__":
+    run_comedy_extension()
