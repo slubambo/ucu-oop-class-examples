@@ -26,6 +26,7 @@ class ShowClock:
         return True
 
 
+
 # ACT 2: Every performance must tell the MC its duration.
 class Performance(ABC):
     venue = "UCU student talent afternoon"  # Class attribute: shared fact.
@@ -99,6 +100,16 @@ class TalentShow:
             self._lineup.append(performance)  # Collaborating objects in a collection.
             return f"MC {self.mc} books {performance.name}."
         return f"No slot for {performance.name}. The timetable has entered the chat."
+
+    def running_order(self):
+        # Report the lineup and remaining time without changing the show.
+        names = [performance.name for performance in self._lineup]
+        return {
+            "names": names,
+            "count": self.act_count,
+            "minutes_left": self.clock.remaining,
+            "message": "No acts booked." if not names else None,
+        }
 
 
 def audition(performances):  # Week 1's function, parameters, list, and loop.
